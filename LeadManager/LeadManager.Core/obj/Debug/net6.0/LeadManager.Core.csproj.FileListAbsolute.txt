@@ -1,0 +1,12 @@
+E:\Projects\LeadManagementSystem v1.0\LeadManager\LeadManager.Core\bin\Debug\net6.0\LeadManager.Core.deps.json
+E:\Projects\LeadManagementSystem v1.0\LeadManager\LeadManager.Core\bin\Debug\net6.0\LeadManager.Core.dll
+E:\Projects\LeadManagementSystem v1.0\LeadManager\LeadManager.Core\bin\Debug\net6.0\LeadManager.Core.pdb
+E:\Projects\LeadManagementSystem v1.0\LeadManager\LeadManager.Core\obj\Debug\net6.0\LeadManager.Core.csproj.AssemblyReference.cache
+E:\Projects\LeadManagementSystem v1.0\LeadManager\LeadManager.Core\obj\Debug\net6.0\LeadManager.Core.GeneratedMSBuildEditorConfig.editorconfig
+E:\Projects\LeadManagementSystem v1.0\LeadManager\LeadManager.Core\obj\Debug\net6.0\LeadManager.Core.AssemblyInfoInputs.cache
+E:\Projects\LeadManagementSystem v1.0\LeadManager\LeadManager.Core\obj\Debug\net6.0\LeadManager.Core.AssemblyInfo.cs
+E:\Projects\LeadManagementSystem v1.0\LeadManager\LeadManager.Core\obj\Debug\net6.0\LeadManager.Core.csproj.CoreCompileInputs.cache
+E:\Projects\LeadManagementSystem v1.0\LeadManager\LeadManager.Core\obj\Debug\net6.0\LeadManager.Core.dll
+E:\Projects\LeadManagementSystem v1.0\LeadManager\LeadManager.Core\obj\Debug\net6.0\refint\LeadManager.Core.dll
+E:\Projects\LeadManagementSystem v1.0\LeadManager\LeadManager.Core\obj\Debug\net6.0\LeadManager.Core.pdb
+E:\Projects\LeadManagementSystem v1.0\LeadManager\LeadManager.Core\obj\Debug\net6.0\ref\LeadManager.Core.dll
