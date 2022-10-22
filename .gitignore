@@ -338,3 +338,5 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/LeadManager/.vs/LeadManager/FileContentIndex/a4572a4f-5457-4823-bb01-cbed81900b61.vsidx
+/.gitignore
