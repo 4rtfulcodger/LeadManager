@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LeadManager.API.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LeadManager.API.Controllers
 {
@@ -7,15 +8,20 @@ namespace LeadManager.API.Controllers
     public class SourceController : ControllerBase
     {
         [HttpGet()]
-        public JsonResult GetSources()
+        public ActionResult<IEnumerable<SourceDto>> GetSources()
         {
-            return new JsonResult(TestDataStore.Current);
+            return Ok(TestDataStore.Current);
         }
 
         [HttpGet("{id}")]
-        public JsonResult GetSources(int id)
+        public ActionResult<SourceDto> GetSources(int id)
         {
-            return new JsonResult(TestDataStore.Current.Sources.FirstOrDefault(x => x.Id == id));
+           var sourceToReturn = TestDataStore.Current.Sources.FirstOrDefault(x => x.Id == id);
+
+            if (sourceToReturn == null)
+                return NotFound();
+
+            return Ok(sourceToReturn);
         }
     }
 }
