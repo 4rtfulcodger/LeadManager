@@ -10,12 +10,12 @@ namespace LeadManager.API.Controllers
     {
         private readonly FileExtensionContentTypeProvider _fileExtensionContentTypeProvider;
 
-        //public FilesController(FileExtensionContentTypeProvider fileExtensionContentTypeProvider)
-        //{
-        //    _fileExtensionContentTypeProvider = fileExtensionContentTypeProvider
-        //        ?? throw new System.ArgumentNullException(
-        //            nameof(fileExtensionContentTypeProvider));
-        //}
+        public FilesController(FileExtensionContentTypeProvider fileExtensionContentTypeProvider)
+        {
+            _fileExtensionContentTypeProvider = fileExtensionContentTypeProvider
+                ?? throw new System.ArgumentNullException(
+                    nameof(fileExtensionContentTypeProvider));
+        }
 
 
         [HttpGet("{fileId}")]
@@ -31,10 +31,10 @@ namespace LeadManager.API.Controllers
 
             var bytes = System.IO.File.ReadAllBytes(pathToFile);
 
-            //if (!_fileExtensionContentTypeProvider.TryGetContentType(pathToFile, out var contentType))
-            //    contentType = "application/octet-stream";
+            if (!_fileExtensionContentTypeProvider.TryGetContentType(pathToFile, out var contentType))
+                contentType = "application/octet-stream";
 
-            return File(bytes, "txt/plain", Path.GetFileName(pathToFile));
+            return File(bytes, contentType, Path.GetFileName(pathToFile));
             
         }
 
