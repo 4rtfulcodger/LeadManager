@@ -13,7 +13,7 @@ namespace LeadManager.API.Controllers
             return Ok(TestDataStore.Current);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetSource")]
         public ActionResult<SourceDto> GetSources(int id)
         {
            var sourceToReturn = TestDataStore.Current.Sources.FirstOrDefault(x => x.Id == id);
@@ -22,6 +22,22 @@ namespace LeadManager.API.Controllers
                 return NotFound();
 
             return Ok(sourceToReturn);
+        }
+
+        [HttpPost]
+        public ActionResult<SourceDto> CreateSource(SourceForCreateDto source)
+        {
+            var newSource = new SourceDto
+            {
+                Id = TestDataStore.Current.Sources.Count() + 1,
+                Name = source.Name,
+                Description = source.Description
+            };
+
+            TestDataStore.Current.Sources.Add(newSource);
+
+            return CreatedAtRoute("GetSource", new { id = newSource.Id }, newSource); 
+
         }
     }
 }
