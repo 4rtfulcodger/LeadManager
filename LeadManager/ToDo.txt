@@ -1,0 +1,24 @@
+
+
+
+General guidance:
+
+Move all business rules and entities into the Core project.
+All dependencies should flow toward the core project.
+Inner projects should define interfaces and outer projects should implement them.
+
+
+1. Move ILeadDataRepository into Leads.Core. Move any other relevant interfaces into Leads.Core to avoid dependencies on Leads.data.
+   The idea is to avoid having LeadsAPI and LeadsCRM having any dependencies on Leads.Data
+
+1. Reduce complexity of ILeadDataRepository by composing it from a collection of smaller Interfaces. 
+   This will be a better approach than defining a large amount of methods within ILeadDataRepository.
+   It will also help comply with the Interface Segregation rule as described in SOLID principles.
+
+2. Refactor API so that Controllers are lean and don't contain complicated business logic. 
+   The purpose of the controller should be to handle the request and give back a response, 
+   any additional processing required should be delegated to a different part of the system.
+   Could potentially use the Mediator Pattern to acsomplish this.
+
+3. If you try to access a page on the CRM while logged out, you should be redirected to the Login page.
+   This is not currently enforced, and results in incorrect behaviour on pages that use Vue.

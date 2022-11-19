@@ -5,9 +5,16 @@ VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeadManager.Core", "LeadManager.Core\LeadManager.Core.csproj", "{9AA403C3-7353-4DED-A6A3-9ED7E4A7F2ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeadManager.Infrastructure", "LeadManager.Infrastructure\LeadManager.Infrastructure.csproj", "{A1B0E8A6-DE1A-4DB3-8F54-9D6A90E0F229}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeadManager.Infrastructure", "LeadManager.Infrastructure\LeadManager.Infrastructure.csproj", "{A1B0E8A6-DE1A-4DB3-8F54-9D6A90E0F229}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeadManager.API", "LeadManager.API\LeadManager.API.csproj", "{1E74195A-0B87-47CB-94BC-BE9D11AE14E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeadManager.API", "LeadManager.API\LeadManager.API.csproj", "{1E74195A-0B87-47CB-94BC-BE9D11AE14E3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{E32BC480-38C3-4641-84E2-B4706527B255}"
+	ProjectSection(SolutionItems) = preProject
+		Entities.txt = Entities.txt
+		RequirementSpec.txt = RequirementSpec.txt
+		ToDo.txt = ToDo.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
