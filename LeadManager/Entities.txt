@@ -6,7 +6,7 @@ TrackingSummary
 LeadAttribute
 Validation
 LeadTransaction
-LeadBuyerFeedback
+Feedback
 Contact
 ContactType
 Address
