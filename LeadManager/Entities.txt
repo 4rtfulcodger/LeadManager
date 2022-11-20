@@ -1,21 +1,18 @@
 
 Lead
 LeadType
-leadSource
-LeadTrackingSummary
+Source
+TrackingSummary
 LeadAttribute
-LeadAttributeValue
-LeadAttributeValidation
-LeadAttributeValidationRule
+Validation
 LeadTransaction
 LeadBuyerFeedback
-Person
-PersonType
+Contact
+ContactType
 Address
 PhoneNumber
-Email
-Provider
+Supplier
 Buyer
-RegisteredUser
+User
 
 
