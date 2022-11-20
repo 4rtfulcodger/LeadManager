@@ -3,22 +3,21 @@
 
 	1.1 Leads
 
-	Will be used for capturing, managing, reporting on and distributing leads.
+	The system will be used for capturing, managing, distributing and producing reports on leads.
 
-	A Lead is defined as a combination of information that will be of interest to a Lead Buyer. A Lead Buyer will use the information
+	A Lead comprises of a combination of information that will be of interest to a Lead Buyer. A Lead Buyer will use the information
 	in a Lead for some sort of gain, which may include selling a product to an interested party.
 
-	A Lead will always be associated with one Lead Type. 
+	A Lead will always have a Lead Type. 
 	A Lead Type can have one or many Lead Attributes that will be specific to that type.
 	A Lead Attribute will always be associated with one Lead Type.
 
-	Each lead inserted into the system will be attributed to a specific Lead Provider. 
+	Each lead inserted into the system will be associated with a Lead Suplier. 
 	This could be a company, a person, an organisation; basically some entity that will claim ownership for submitting the lead. 
 
 	A Lead will be associated with a Lead Source which will store information regarding where the lead originated. 
 
-	On lead creation the Lead API will return a response indicating if the lead is valid or invalid, and depending on this 
-	conversion pixels will be loaded or ignored on the client site.
+	On lead creation, the Lead API will return a response indicating if the lead is valid or invalid.
 
 	Each lead will have a detailed audit log that can be used to look up a history of all events and processing associated with a lead.
 
