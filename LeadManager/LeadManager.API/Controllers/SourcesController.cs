@@ -10,7 +10,7 @@ namespace LeadManager.API.Controllers
         [HttpGet()]
         public ActionResult<IEnumerable<SourceDto>> GetSources()
         {
-            return Ok(TestDataStore.Current);
+            return Ok(TestDataStore.Current.Sources);
         }
 
         [HttpGet("{id}", Name = "GetSource")]
