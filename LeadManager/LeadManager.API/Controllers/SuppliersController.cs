@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace LeadManager.API.Controllers
 {
     [ApiController]
-    [Route("/api/supplier")]
-    public class SupplierController : ControllerBase
+    [Route("/api/suppliers")]
+    public class SuppliersController : ControllerBase
     {
         [HttpGet()]
         public ActionResult<IEnumerable<SourceDto>> GetSuppliers()
@@ -30,7 +30,7 @@ namespace LeadManager.API.Controllers
         {
             var newSupplier = new SupplierDto
             {
-                Id = TestDataStore.Current.Sources.Count() + 1,
+                Id = TestDataStore.Current.Suppliers.Count() + 1,
                 Name = supplier.Name,
                 Description = supplier.Description
             };
