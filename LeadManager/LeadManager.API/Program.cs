@@ -14,6 +14,7 @@ builder.Services.AddControllers(options =>
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddHealthChecks();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 
@@ -30,6 +31,14 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.UseRouting().UseEndpoints(endpoints =>
+{
+    endpoints.MapHealthChecks("/healthcheck");
+});
 app.MapControllers();
 
 app.Run();
+
+//In normal circumstances the Program.cs is compiled into a private Program class that cannot be accessed out of this assembly
+//We add the following partial class so we can access Program from the IntegrationTests project
+public partial class Program { }
