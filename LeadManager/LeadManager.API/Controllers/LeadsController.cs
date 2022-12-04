@@ -8,6 +8,13 @@ namespace LeadManager.API.Controllers
     [ApiController]
     public class LeadsController : ControllerBase
     {
+        private readonly ILogger<FilesController> _logger;
+
+        public LeadsController(ILogger<FilesController> logger)
+        {
+            _logger = logger ?? throw new ArgumentException(nameof(logger));
+        }
+
         [HttpGet()]
         public ActionResult<IEnumerable<LeadDto>> GetLeads(int supplierId)
         {
@@ -22,6 +29,8 @@ namespace LeadManager.API.Controllers
         [HttpGet("{id}", Name = "GetLead")]
         public ActionResult<LeadDto> GetLead(int id,int supplierId)
         {
+            _logger.Log( LogLevel.Debug, "GET Request to LeadsController, GetLead action");
+
             var supplier = TestDataStore.Current.Suppliers.FirstOrDefault(x => x.Id == supplierId);
 
             if (supplier == null)

@@ -9,12 +9,15 @@ namespace LeadManager.API.Controllers
     public class FilesController : ControllerBase
     {
         private readonly FileExtensionContentTypeProvider _fileExtensionContentTypeProvider;
+        private readonly ILogger<FilesController> _logger;
 
-        public FilesController(FileExtensionContentTypeProvider fileExtensionContentTypeProvider)
+        public FilesController(FileExtensionContentTypeProvider fileExtensionContentTypeProvider,
+            ILogger<FilesController> logger)
         {
             _fileExtensionContentTypeProvider = fileExtensionContentTypeProvider
                 ?? throw new System.ArgumentNullException(
                     nameof(fileExtensionContentTypeProvider));
+            _logger = logger ?? throw new ArgumentException(nameof(logger));
         }
 
 
