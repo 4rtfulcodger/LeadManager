@@ -341,3 +341,4 @@ healthchecksdb
 LeadManager/.vs/
 /.gitignore
 /LeadManager/.vs/LeadManager/
+*.dll
