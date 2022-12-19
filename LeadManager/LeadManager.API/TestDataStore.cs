@@ -2,7 +2,7 @@
 
 namespace LeadManager.API
 {
-    public class TestDataStore
+    public class TestDataStore 
     {
         public List<SourceDto> Sources { get; set; }
         public List<SupplierDto> Suppliers { get; set; }

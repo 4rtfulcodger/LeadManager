@@ -12,9 +12,11 @@ namespace LeadManager.API.Controllers
     {
         private readonly ILogger<FilesController> _logger;
         private readonly IEmailService _emailService;
+        public ILeadDataRepository _leadDataRepository { get; }
 
-        public LeadsController(ILogger<FilesController> logger, IEmailService emailService)
+        public LeadsController(ILeadDataRepository leadDataRepository, ILogger<FilesController> logger, IEmailService emailService)
         {
+            _leadDataRepository = leadDataRepository ?? throw new ArgumentException(nameof(leadDataRepository)); ;
             _logger = logger ?? throw new ArgumentException(nameof(logger));
             _emailService = emailService ?? throw new ArgumentException(nameof(emailService));
         }
@@ -27,7 +29,7 @@ namespace LeadManager.API.Controllers
             if (supplier == null)
                 return NotFound();
 
-            return Ok(TestDataStore.Current.Leads);
+            return Ok(_leadDataRepository.GetLeads());
         }
 
         [HttpGet("{id}", Name = "GetLead")]

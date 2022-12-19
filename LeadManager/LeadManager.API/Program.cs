@@ -1,4 +1,5 @@
 using LeadManager.Core.Interfaces;
+using LeadManager.Infrastructure.Data.Repositories;
 using LeadManager.Infrastructure.Services;
 using Microsoft.AspNetCore.StaticFiles;
 using Serilog;
@@ -30,6 +31,7 @@ builder.Services.AddHealthChecks();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 builder.Services.AddTransient<IEmailService, TestEmailService>();
+builder.Services.AddSingleton<ILeadDataRepository, LeadDataRepository>();
 
 var app = builder.Build();
 
