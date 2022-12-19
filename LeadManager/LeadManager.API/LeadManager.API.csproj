@@ -18,6 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LeadManager.Core\LeadManager.Core.csproj" />
+    <ProjectReference Include="..\LeadManager.Infrastructure\LeadManager.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Files\sns-menukort-2022-08-uk-150x380-low.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

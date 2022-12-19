@@ -10,4 +10,8 @@
     <Folder Include="Data\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LeadManager.Core\LeadManager.Core.csproj" />
+  </ItemGroup>
+
 </Project>

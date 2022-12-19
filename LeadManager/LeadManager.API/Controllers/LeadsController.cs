@@ -1,6 +1,8 @@
 ﻿using LeadManager.API.Models;
+using LeadManager.Core.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace LeadManager.API.Controllers
 {
@@ -9,10 +11,12 @@ namespace LeadManager.API.Controllers
     public class LeadsController : ControllerBase
     {
         private readonly ILogger<FilesController> _logger;
+        private readonly IEmailService _emailService;
 
-        public LeadsController(ILogger<FilesController> logger)
+        public LeadsController(ILogger<FilesController> logger, IEmailService emailService)
         {
             _logger = logger ?? throw new ArgumentException(nameof(logger));
+            _emailService = emailService ?? throw new ArgumentException(nameof(emailService));
         }
 
         [HttpGet()]
@@ -30,7 +34,7 @@ namespace LeadManager.API.Controllers
         public ActionResult<LeadDto> GetLead(int id,int supplierId)
         {
             _logger.Log( LogLevel.Debug, "GET Request to LeadsController, GetLead action");
-
+            
             var supplier = TestDataStore.Current.Suppliers.FirstOrDefault(x => x.Id == supplierId);
 
             if (supplier == null)
@@ -60,6 +64,8 @@ namespace LeadManager.API.Controllers
             };
 
             TestDataStore.Current.Leads.Add(newLead);
+
+            _emailService.Send($"New lead (ID:{newLead.Id})", "audit@testlm.com", $"A new lead has been created: {JsonSerializer.Serialize(newLead)}");
 
             return CreatedAtRoute("GetLead", new { id = newLead.Id, supplierId = supplierId }, newLead);
 

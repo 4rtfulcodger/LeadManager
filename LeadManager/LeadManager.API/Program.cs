@@ -1,3 +1,5 @@
+using LeadManager.Core.Interfaces;
+using LeadManager.Infrastructure.Services;
 using Microsoft.AspNetCore.StaticFiles;
 using Serilog;
 
@@ -27,6 +29,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHealthChecks();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
+builder.Services.AddTransient<IEmailService, TestEmailService>();
 
 var app = builder.Build();
 
