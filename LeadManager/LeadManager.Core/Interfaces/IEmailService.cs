@@ -8,6 +8,6 @@ namespace LeadManager.Core.Interfaces
 {
     public interface IEmailService
     {
-        void Send(string subject, string recipientEmail, string message);
+        void Send(string subject, string message, string recipientEmail = "");
     }
 }

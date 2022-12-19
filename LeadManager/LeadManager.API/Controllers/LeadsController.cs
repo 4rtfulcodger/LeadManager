@@ -67,7 +67,7 @@ namespace LeadManager.API.Controllers
 
             TestDataStore.Current.Leads.Add(newLead);
 
-            _emailService.Send($"New lead (ID:{newLead.Id})", "audit@testlm.com", $"A new lead has been created: {JsonSerializer.Serialize(newLead)}");
+            _emailService.Send($"New lead (ID:{newLead.Id})", $"A new lead has been created: {JsonSerializer.Serialize(newLead)}");
 
             return CreatedAtRoute("GetLead", new { id = newLead.Id, supplierId = supplierId }, newLead);
 

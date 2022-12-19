@@ -1,4 +1,5 @@
 ﻿using LeadManager.Core.Interfaces;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +10,21 @@ namespace LeadManager.Infrastructure.Services
 {
     public class TestEmailService : IEmailService
     {
-        private string _emailTo = "testrecipient@testlm.com";
-        private string _emailFrom = "testsender@testlm.com";    
+        private string _emailTo = String.Empty;
+        private string _emailFrom = String.Empty;
 
-        public void Send(string subject, string recipientEmail, string message)
+        public TestEmailService(IConfiguration configuration)
         {
-            Console.WriteLine($"An email with subject \"{subject}\" and message \"{message}\" has been sent to {recipientEmail}");
+            _emailTo = configuration["MailSettings:mailToAddress"];
+            _emailFrom = configuration["MailSettings:mailFromAddress"];
+        }
+
+        public void Send(string subject, string message, string recipientEmail = "")
+        {
+            if (recipientEmail == String.Empty)
+                recipientEmail = _emailTo;
+
+            Console.WriteLine($"An email with subject \"{subject}\" and message \"{message}\" has been sent to {recipientEmail} from {_emailFrom}");
         }
     }
 }
