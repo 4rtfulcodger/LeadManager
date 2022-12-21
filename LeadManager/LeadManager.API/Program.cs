@@ -1,8 +1,12 @@
 using LeadManager.Core.Interfaces;
+using LeadManager.Infrastructure.Data;
 using LeadManager.Infrastructure.Data.Repositories;
 using LeadManager.Infrastructure.Services;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Serilog;
+
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
@@ -32,6 +36,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 builder.Services.AddTransient<IEmailService, TestEmailService>();
 builder.Services.AddSingleton<ILeadDataRepository, LeadDataRepository>();
+builder.Services.AddDbContext<LeadManagerDbContext>(
+    options => options.UseSqlServer(builder.Configuration["ConnectionStrings:LeadManagerDb"]));
+
 
 var app = builder.Build();
 

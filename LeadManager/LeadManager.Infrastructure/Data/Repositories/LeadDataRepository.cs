@@ -24,18 +24,18 @@ namespace LeadManager.Infrastructure.Data.Repositories
         {
             _sources = new List<Source>()
             {
-                new Source{ Id=1, Name="Search Engine", Description="Leads which originated from a search engine, stored in LeadDataRepository"},
-                new Source{ Id=2, Name="Social Media", Description="Leads which originated from social media, stored in LeadDataRepository"}
+                new Source(1, "Search Engine", "Leads which originated from a search engine, stored in LeadDataRepository"),
+                new Source(2, "Social Media", "Leads which originated from social media, stored in LeadDataRepository")
             };
             _suppliers = new List<Supplier>()
             {
-                new Supplier{ Id=1, Name="Supplier1", Description="Lead supplier with name Supplier1 from LeadDataRepository"},
-                new Supplier{ Id=2, Name="Supplier2", Description="Lead supplier with name Supplier2 from LeadDataRepository"}
+                new Supplier(1, "Supplier1", "Lead supplier with name Supplier1 from LeadDataRepository"),
+                new Supplier(2, "Supplier2", "Lead supplier with name Supplier2 from LeadDataRepository")
             };
             Leads = new List<Lead>()
             {
-                new Lead{ Id=1, Name="Lead1", Description="Lead 1 description from LeadDataRepository"},
-                new Lead{ Id=2, Name="Lead2", Description="Lead 2 description from LeadDataRepository"}
+                new Lead(1,1,"Lead1", "Lead 1 description from LeadDataRepository"),
+                new Lead(2,2, "Lead2", "Lead 2 description from LeadDataRepository")
             };
         }
 
@@ -56,17 +56,17 @@ namespace LeadManager.Infrastructure.Data.Repositories
 
         public Lead GetLeadWithId(int Id)
         {
-            return _leads.FirstOrDefault(x => x.Id == Id);
+            return _leads.FirstOrDefault(x => x.LeadId == Id);
         }
 
         public Lead GetSourceWithId(int Id)
         {
-           return _leads.FirstOrDefault(x => x.Id == Id);
+           return _leads.FirstOrDefault(x => x.SourceId == Id);
         }
 
         Source ILeadDataRepository.GetSourceWithId(int Id)
         {
-            return _sources.FirstOrDefault(x => x.Id == Id);
+            return _sources.FirstOrDefault(x => x.SourceId == Id);
         }
     }
 }
