@@ -38,7 +38,9 @@ namespace LeadManager.Infrastructure.Data
             modelBuilder.Entity<Lead>().HasData(
                    new Lead(1,1, "Lead1", "Lead1 with Source1 and Supplier1") { LeadId = 1},
                    new Lead(2,2, "Lead2", "Lead2 with Source2 and Supplier2") { LeadId = 2 },
-                   new Lead(3,3, "Lead3", "Lead3 with Source3 and Supplier3") { LeadId = 3 }
+                   new Lead(3,3, "Lead3", "Lead3 with Source3 and Supplier3") { LeadId = 3 },
+                   new Lead(1, 1, "Lead4", "Lead4 with Source1 and Supplier1") { LeadId = 4},
+                   new Lead(1, 1, "Lead5", "Lead5 with Source1 and Supplier1") { LeadId = 5 }
                );
 
 
@@ -46,10 +48,7 @@ namespace LeadManager.Infrastructure.Data
             //base.OnModelCreating is required for IdentityDbContext
             base.OnModelCreating(modelBuilder);
 
-            //base.OnModelCreating is required for IdentityDbContext
-            base.OnModelCreating(modelBuilder);
-
-
+           
 
         }
 

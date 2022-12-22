@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LeadManager.Core.ViewModels
 {
-    public class LoginViewModel
+    public class LoginDto
     {
         [Required]
         public string UserName { get; set; }
@@ -15,5 +15,12 @@ namespace LeadManager.Core.ViewModels
         public string Password { get; set; }
 
         public bool RememberMe { get; set; }
+
+        public LoginDto(string userName, string password, bool rememberMe = false)
+        {
+            UserName = userName;
+            Password = password;
+            RememberMe = rememberMe;
+        }
     }
 }

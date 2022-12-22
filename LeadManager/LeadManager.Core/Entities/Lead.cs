@@ -19,7 +19,7 @@ namespace LeadManager.Core.Entities
         public int SourceId { get; set; }
 
         [ForeignKey("SupplierId")]
-        public Source Supplier { get; set; }
+        public Supplier Supplier { get; set; }
         public int SupplierId { get; set; }
 
         [Required]

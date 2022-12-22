@@ -1,7 +1,10 @@
 ﻿using LeadManager.API.Models;
+using LeadManager.Core.Entities;
 using LeadManager.Core.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Text.Json;
 
 namespace LeadManager.API.Controllers
@@ -12,40 +15,50 @@ namespace LeadManager.API.Controllers
     {
         private readonly ILogger<FilesController> _logger;
         private readonly IEmailService _emailService;
-        public ILeadDataRepository _leadDataRepository { get; }
+        public ILeadInfoRepository _leadInfoRepository;
 
-        public LeadsController(ILeadDataRepository leadDataRepository, ILogger<FilesController> logger, IEmailService emailService)
+        public LeadsController(ILeadInfoRepository leadInfoRepository, ILogger<FilesController> logger, IEmailService emailService)
         {
-            _leadDataRepository = leadDataRepository ?? throw new ArgumentException(nameof(leadDataRepository)); ;
+            _leadInfoRepository = leadInfoRepository ?? throw new ArgumentException(nameof(leadInfoRepository)); ;
             _logger = logger ?? throw new ArgumentException(nameof(logger));
             _emailService = emailService ?? throw new ArgumentException(nameof(emailService));
         }
+               
 
         [HttpGet()]
-        public ActionResult<IEnumerable<LeadDto>> GetLeads(int supplierId)
+        public async Task<ActionResult<IEnumerable<LeadDto>>> GetLeadsForSupplier(int supplierId)
         {
-            var supplier = TestDataStore.Current.Suppliers.FirstOrDefault(x => x.Id == supplierId);
+            //Validation and filter logic should be removed from controllers
+            //Temporarily adding these for testing
 
-            if (supplier == null)
+            var leads = await _leadInfoRepository.GetLeadsAsync();           
+
+            if (leads.Where(l => l.SupplierId == supplierId).Count() == 0)
                 return NotFound();
 
-            return Ok(_leadDataRepository.GetLeads());
+            return Ok(leads.Where(l => l.SupplierId == supplierId));
         }
 
         [HttpGet("{id}", Name = "GetLead")]
-        public ActionResult<LeadDto> GetLead(int id,int supplierId)
+        public async Task<ActionResult<LeadDto>> GetLead(int id,int supplierId)
         {
+            //Validation and filter logic should be removed from controllers
+            //Temporarily adding these for testing
+
             _logger.Log( LogLevel.Debug, "GET Request to LeadsController, GetLead action");
             
-            var supplier = TestDataStore.Current.Suppliers.FirstOrDefault(x => x.Id == supplierId);
+            var supplier = await _leadInfoRepository.GetSupplierWithIdAsync(supplierId);
 
             if (supplier == null)
                 return NotFound();
 
-            var leadToReturn = TestDataStore.Current.Leads.FirstOrDefault(x => x.Id == id);
+            var leadToReturn = await _leadInfoRepository.GetLeadWithIdAsync(id, true, true);
 
-            if (leadToReturn == null)
+            if(leadToReturn==null)
                 return NotFound();
+
+            if (leadToReturn?.SupplierId != supplierId)
+                return BadRequest();
 
             return Ok(leadToReturn);
         }

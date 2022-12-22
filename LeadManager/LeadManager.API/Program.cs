@@ -35,7 +35,7 @@ builder.Services.AddHealthChecks();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 builder.Services.AddTransient<IEmailService, TestEmailService>();
-builder.Services.AddSingleton<ILeadDataRepository, LeadDataRepository>();
+builder.Services.AddScoped<ILeadInfoRepository, LeadInfoRepository>();
 builder.Services.AddDbContext<LeadManagerDbContext>(
     options => options.UseSqlServer(builder.Configuration["ConnectionStrings:LeadManagerDb"]));
 
@@ -47,6 +47,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
 }
 
 app.UseHttpsRedirection();
