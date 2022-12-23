@@ -18,9 +18,26 @@ namespace LeadManager.Infrastructure.Data.Repositories
             _dbContext = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<IEnumerable<Lead>> GetLeadsAsync()
+        #region Leads
+
+        public async Task<bool> AddLeadAsync(Lead lead)
         {
-            return await _dbContext.Leads.ToListAsync();
+            _dbContext.Add(lead);   
+
+            return (await _dbContext.SaveChangesAsync() >= 0);
+        }
+
+        public async Task<IEnumerable<Lead>> GetLeadsAsync(bool includeSource = false, bool includeSupplier = false)
+        {
+            IQueryable<Lead> leads = _dbContext.Leads;
+
+            if (includeSource)
+                leads = leads.Include(l => l.Source);
+
+            if (includeSupplier)
+                leads = leads.Include(l => l.Supplier);
+            
+            return await leads.ToListAsync();
         }
 
         public async Task<Lead?> GetLeadWithIdAsync(int Id, bool includeSource = false, bool includeSupplier = false)
@@ -36,6 +53,10 @@ namespace LeadManager.Infrastructure.Data.Repositories
             return await leads.Where(l => l.LeadId == Id).FirstOrDefaultAsync();
         }
 
+        #endregion
+
+        #region Source
+
         public async Task<IEnumerable<Source>> GetSourcesAsync()
         {
             return await _dbContext.Sources.ToListAsync();
@@ -46,6 +67,9 @@ namespace LeadManager.Infrastructure.Data.Repositories
             return await _dbContext.Sources.Where(l => l.SourceId == Id).FirstOrDefaultAsync();
         }
 
+        #endregion
+
+        #region Supplier
         public async Task<IEnumerable<Supplier>> GetSuppliersAsync()
         {
             return await _dbContext.Suppliers.ToListAsync();
@@ -55,5 +79,12 @@ namespace LeadManager.Infrastructure.Data.Repositories
         {
             return await _dbContext.Suppliers.Where(l => l.SupplierId == Id).FirstOrDefaultAsync();
         }
+
+        public Task<bool> SaveChangesAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

@@ -1,4 +1,5 @@
-﻿using LeadManager.API.Models;
+﻿using AutoMapper;
+using LeadManager.API.Models;
 using LeadManager.Core.Entities;
 using LeadManager.Core.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -15,28 +16,33 @@ namespace LeadManager.API.Controllers
     {
         private readonly ILogger<FilesController> _logger;
         private readonly IEmailService _emailService;
+        private readonly IMapper _mapper;
         public ILeadInfoRepository _leadInfoRepository;
 
-        public LeadsController(ILeadInfoRepository leadInfoRepository, ILogger<FilesController> logger, IEmailService emailService)
+        public LeadsController(ILeadInfoRepository leadInfoRepository,
+            ILogger<FilesController> logger,
+            IEmailService emailService,
+            IMapper mapper)
         {
             _leadInfoRepository = leadInfoRepository ?? throw new ArgumentException(nameof(leadInfoRepository)); ;
             _logger = logger ?? throw new ArgumentException(nameof(logger));
             _emailService = emailService ?? throw new ArgumentException(nameof(emailService));
+            _mapper = mapper;
         }
                
 
         [HttpGet()]
-        public async Task<ActionResult<IEnumerable<LeadDto>>> GetLeadsForSupplier(int supplierId)
+        public async Task<ActionResult<IEnumerable<LeadDto>>> GetLeadsForSupplier(int supplierId, bool includeSource, bool includeSupplier)
         {
             //Validation and filter logic should be removed from controllers
             //Temporarily adding these for testing
 
-            var leads = await _leadInfoRepository.GetLeadsAsync();           
+            var leads = await _leadInfoRepository.GetLeadsAsync(includeSource, includeSupplier);           
 
             if (leads.Where(l => l.SupplierId == supplierId).Count() == 0)
                 return NotFound();
 
-            return Ok(leads.Where(l => l.SupplierId == supplierId));
+            return Ok(_mapper.Map<IEnumerable<LeadDto>>(leads.Where(l => l.SupplierId == supplierId)));
         }
 
         [HttpGet("{id}", Name = "GetLead")]
@@ -60,29 +66,37 @@ namespace LeadManager.API.Controllers
             if (leadToReturn?.SupplierId != supplierId)
                 return BadRequest();
 
-            return Ok(leadToReturn);
+            return Ok(_mapper.Map<LeadDto>(leadToReturn));
         }
 
         [HttpPost]
-        public ActionResult<LeadDto> CreateLead(LeadForCreateDto lead, int supplierId)
+        public async Task<ActionResult<LeadDto>> CreateLead(LeadForCreateDto leadDto, int supplierId)
         {
-            var supplier = TestDataStore.Current.Suppliers.FirstOrDefault(x => x.Id == supplierId);
+            var supplier = await _leadInfoRepository.GetSupplierWithIdAsync(supplierId);
 
             if (supplier == null)
                 return NotFound();
 
-            var newLead = new LeadDto
+            var source = await _leadInfoRepository.GetSourceWithIdAsync(leadDto.SourceId);
+
+            if (source == null)
+                return NotFound();
+
+            var newLead = _mapper.Map<Lead>(leadDto);
+
+            bool addLeadSuccess = await _leadInfoRepository.AddLeadAsync(newLead);
+
+            if (addLeadSuccess)
             {
-                Id = TestDataStore.Current.Leads.Count() + 1,
-                Name = lead.Name,
-                Description = lead.Description
-            };
+                _emailService.Send($"New lead (ID:{newLead.LeadId})", $"A new lead has been created: {JsonSerializer.Serialize(newLead)}");
+            }
+            else 
+            {
+                _emailService.Send($"There was an error when trying to add a lead", $"There was an error when trying to add the following lead: {JsonSerializer.Serialize(newLead)}");
+            }          
+                        
 
-            TestDataStore.Current.Leads.Add(newLead);
-
-            _emailService.Send($"New lead (ID:{newLead.Id})", $"A new lead has been created: {JsonSerializer.Serialize(newLead)}");
-
-            return CreatedAtRoute("GetLead", new { id = newLead.Id, supplierId = supplierId }, newLead);
+            return CreatedAtRoute("GetLead", new { id = newLead.LeadId, supplierId = supplierId }, newLead);
 
         }
     }

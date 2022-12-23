@@ -36,9 +36,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 builder.Services.AddTransient<IEmailService, TestEmailService>();
 builder.Services.AddScoped<ILeadInfoRepository, LeadInfoRepository>();
-builder.Services.AddDbContext<LeadManagerDbContext>(
-    options => options.UseSqlServer(builder.Configuration["ConnectionStrings:LeadManagerDb"]));
-
+builder.Services.AddDbContext<LeadManagerDbContext>(options => options.UseSqlServer(builder.Configuration["ConnectionStrings:LeadManagerDb"]));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 
