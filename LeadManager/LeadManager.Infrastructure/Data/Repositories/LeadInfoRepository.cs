@@ -27,6 +27,11 @@ namespace LeadManager.Infrastructure.Data.Repositories
             return (await _dbContext.SaveChangesAsync() >= 0);
         }
 
+        public async Task<bool> UpdateLeadAsync(int leadId)
+        {
+            return (await _dbContext.SaveChangesAsync() >= 0);
+        }
+
         public async Task<IEnumerable<Lead>> GetLeadsAsync(bool includeSource = false, bool includeSupplier = false)
         {
             IQueryable<Lead> leads = _dbContext.Leads;
@@ -51,6 +56,12 @@ namespace LeadManager.Infrastructure.Data.Repositories
                 leads = leads.Include(l => l.Supplier);
 
             return await leads.Where(l => l.LeadId == Id).FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> DeleteLead(Lead lead)
+        {
+           _dbContext.Remove(lead);
+            return (await _dbContext.SaveChangesAsync() >= 0);
         }
 
         #endregion
@@ -83,7 +94,7 @@ namespace LeadManager.Infrastructure.Data.Repositories
         public Task<bool> SaveChangesAsync()
         {
             throw new NotImplementedException();
-        }
+        }        
 
         #endregion
     }

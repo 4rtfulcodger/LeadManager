@@ -16,7 +16,12 @@ namespace LeadManager.API.Profiles
                 .ForMember(l => l.SourceId, opt => opt.MapFrom(lfcd => lfcd.SourceId))
                 .ReverseMap()
                 .ForMember(l => l.SupplierId, opt => opt.MapFrom(lfcd => lfcd.SupplierId))
-                .ReverseMap(); 
+                .ReverseMap();
+            CreateMap<Lead, LeadForUpdateDto>()
+                .ForMember(l => l.SourceId, opt => opt.MapFrom(lfud => lfud.SourceId))
+                .ReverseMap()
+                .ForMember(l => l.SupplierId, opt => opt.MapFrom(lfud => lfud.SupplierId))
+                .ReverseMap();
         }
     }
 }

@@ -4,6 +4,7 @@ using LeadManager.Core.Entities;
 using LeadManager.Core.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Text.Json;
@@ -29,7 +30,7 @@ namespace LeadManager.API.Controllers
             _emailService = emailService ?? throw new ArgumentException(nameof(emailService));
             _mapper = mapper;
         }
-               
+
 
         [HttpGet()]
         public async Task<ActionResult<IEnumerable<LeadDto>>> GetLeadsForSupplier(int supplierId, bool includeSource, bool includeSupplier)
@@ -37,7 +38,7 @@ namespace LeadManager.API.Controllers
             //Validation and filter logic should be removed from controllers
             //Temporarily adding these for testing
 
-            var leads = await _leadInfoRepository.GetLeadsAsync(includeSource, includeSupplier);           
+            var leads = await _leadInfoRepository.GetLeadsAsync(includeSource, includeSupplier);
 
             if (leads.Where(l => l.SupplierId == supplierId).Count() == 0)
                 return NotFound();
@@ -46,13 +47,13 @@ namespace LeadManager.API.Controllers
         }
 
         [HttpGet("{id}", Name = "GetLead")]
-        public async Task<ActionResult<LeadDto>> GetLead(int id,int supplierId)
+        public async Task<ActionResult<LeadDto>> GetLead(int id, int supplierId)
         {
             //Validation and filter logic should be removed from controllers
             //Temporarily adding these for testing
 
-            _logger.Log( LogLevel.Debug, "GET Request to LeadsController, GetLead action");
-            
+            _logger.Log(LogLevel.Debug, "GET Request to LeadsController, GetLead action");
+
             var supplier = await _leadInfoRepository.GetSupplierWithIdAsync(supplierId);
 
             if (supplier == null)
@@ -60,7 +61,7 @@ namespace LeadManager.API.Controllers
 
             var leadToReturn = await _leadInfoRepository.GetLeadWithIdAsync(id, true, true);
 
-            if(leadToReturn==null)
+            if (leadToReturn == null)
                 return NotFound();
 
             if (leadToReturn?.SupplierId != supplierId)
@@ -90,14 +91,80 @@ namespace LeadManager.API.Controllers
             {
                 _emailService.Send($"New lead (ID:{newLead.LeadId})", $"A new lead has been created: {JsonSerializer.Serialize(newLead)}");
             }
-            else 
+            else
             {
                 _emailService.Send($"There was an error when trying to add a lead", $"There was an error when trying to add the following lead: {JsonSerializer.Serialize(newLead)}");
-            }          
-                        
+            }
+
 
             return CreatedAtRoute("GetLead", new { id = newLead.LeadId, supplierId = supplierId }, newLead);
 
+        }
+
+        [HttpPatch("{leadId}")]
+        public async Task<ActionResult<LeadDto>> UpdateLead(JsonPatchDocument<LeadForUpdateDto> patchDocument, int supplierId, int leadId)
+        {
+            var supplier = await _leadInfoRepository.GetSupplierWithIdAsync(supplierId);
+
+            if (supplier == null)
+                return NotFound();
+                              
+
+            var leadEntity = await _leadInfoRepository.GetLeadWithIdAsync(leadId, false, false);
+            if (leadEntity == null)
+                return NotFound();
+
+            var updatedLead = _mapper.Map<LeadForUpdateDto>(leadEntity);
+
+            patchDocument.ApplyTo(updatedLead);
+
+            var source = await _leadInfoRepository.GetSourceWithIdAsync(updatedLead.SourceId);
+
+            if (source == null)
+                return NotFound();
+
+            _mapper.Map(updatedLead, leadEntity);
+            bool updateresult =  await _leadInfoRepository.UpdateLeadAsync(leadId);
+
+            if (updateresult)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return Problem();
+            }
+
+        }
+
+        [HttpDelete("{id}", Name = "DeleteLead")]
+        public async Task<ActionResult<LeadDto>> DeleteLead(int id, int supplierId)
+        {
+            //Validation and filter logic should be removed from controllers
+            //Temporarily adding these for testing
+
+            _logger.Log(LogLevel.Debug, "Request to LeadsController, DeleteLead action");
+
+            var supplier = await _leadInfoRepository.GetSupplierWithIdAsync(supplierId);
+
+            if (supplier == null)
+                return NotFound();
+
+            var leadToDelete = await _leadInfoRepository.GetLeadWithIdAsync(id, true, true);
+
+            if (leadToDelete == null)
+                return NotFound();
+
+            var deleteResult = await _leadInfoRepository.DeleteLead(leadToDelete);
+
+            if (deleteResult)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return Problem();
+            }
         }
     }
 }
