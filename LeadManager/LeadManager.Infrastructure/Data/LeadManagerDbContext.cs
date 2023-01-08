@@ -24,15 +24,15 @@ namespace LeadManager.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Source>().HasData(
-                   new Source(1, "Source1", "Source1 description") { },
-                   new Source(2, "Source2", "Source2 description") { },
-                   new Source(3, "Source3", "Source3 description") { }
+                   new Source("Source1", "Source1 description") { SourceId = 1 },
+                   new Source("Source2", "Source2 description") { SourceId = 2 },
+                   new Source("Source3", "Source3 description") { SourceId = 3 }
                );
 
             modelBuilder.Entity<Supplier>().HasData(
-                   new Supplier(1, "Supplier1", "Supplier1 description") { },
-                   new Supplier(2, "Supplier2", "Supplier2 description") { },
-                   new Supplier(3, "Supplier3", "Supplier3 description") { }
+                   new Supplier("Supplier1", "Supplier1 description") { SupplierId = 1 },
+                   new Supplier("Supplier2", "Supplier2 description") { SupplierId = 2 },
+                   new Supplier("Supplier3", "Supplier3 description") { SupplierId = 3 }
                );
 
             modelBuilder.Entity<Lead>().HasData(

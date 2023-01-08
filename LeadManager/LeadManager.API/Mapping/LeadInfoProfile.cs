@@ -8,9 +8,17 @@ namespace LeadManager.API.Profiles
     {
         public LeadInfoProfile()
         {
-            CreateMap<Source, SourceDto>().ForMember(s => s.Id, opt => opt.MapFrom(sd => sd.SourceId));
-            CreateMap<Supplier, SupplierDto>().ForMember(s => s.Id, opt => opt.MapFrom(sd => sd.SupplierId));
+            #region Source
+            CreateMap<Source, SourceDto>().ForMember(s => s.Id, opt => opt.MapFrom(sd => sd.SourceId)).ReverseMap();
+            CreateMap<Source, SourceForCreateDto>().ReverseMap();
+            #endregion
 
+            #region Supplier
+            CreateMap<Supplier, SupplierDto>().ForMember(s => s.Id, opt => opt.MapFrom(sd => sd.SupplierId)).ReverseMap();
+            CreateMap<Supplier, SupplierForCreateDto>().ReverseMap();
+            #endregion
+
+            #region Lead 
             CreateMap<Lead,LeadDto>().ForMember(l => l.Id, opt => opt.MapFrom(ld => ld.LeadId));
             CreateMap<Lead,LeadForCreateDto>()
                 .ForMember(l => l.SourceId, opt => opt.MapFrom(lfcd => lfcd.SourceId))
@@ -22,6 +30,7 @@ namespace LeadManager.API.Profiles
                 .ReverseMap()
                 .ForMember(l => l.SupplierId, opt => opt.MapFrom(lfud => lfud.SupplierId))
                 .ReverseMap();
+            #endregion
         }
     }
 }

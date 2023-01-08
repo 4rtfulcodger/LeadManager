@@ -21,9 +21,8 @@ namespace LeadManager.Core.Entities
         [MaxLength(200)]
         public string? Description { get; set; }
 
-        public Source(int sourceId, string name, string? description)
+        public Source(string name, string? description)
         {
-            SourceId = sourceId;    
             Name = name;
             Description = description;  
         }

@@ -1,4 +1,5 @@
 ﻿using LeadManager.Core.Entities;
+using LeadManager.Core.Helpers;
 using LeadManager.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -22,8 +23,7 @@ namespace LeadManager.Infrastructure.Data.Repositories
 
         public async Task<bool> AddLeadAsync(Lead lead)
         {
-            _dbContext.Add(lead);   
-
+            _dbContext.Add(lead);
             return (await _dbContext.SaveChangesAsync() >= 0);
         }
 
@@ -32,16 +32,21 @@ namespace LeadManager.Infrastructure.Data.Repositories
             return (await _dbContext.SaveChangesAsync() >= 0);
         }
 
-        public async Task<IEnumerable<Lead>> GetLeadsAsync(bool includeSource = false, bool includeSupplier = false)
+        public async Task<IEnumerable<Lead>> GetLeadsAsync(LeadFilter leadFilter)
         {
             IQueryable<Lead> leads = _dbContext.Leads;
 
-            if (includeSource)
+            if (leadFilter.IncludeSource)
                 leads = leads.Include(l => l.Source);
 
-            if (includeSupplier)
+            if (leadFilter.IncludeSupplier)
                 leads = leads.Include(l => l.Supplier);
-            
+
+
+            if (leadFilter.supplierIds.Count() > 0)
+                leads = leads.Where(l => leadFilter.supplierIds.Contains(l.SupplierId)); 
+
+
             return await leads.ToListAsync();
         }
 
@@ -68,6 +73,11 @@ namespace LeadManager.Infrastructure.Data.Repositories
 
         #region Source
 
+        public async Task<bool> AddSourceAsync(Source source)
+        {
+            _dbContext.Add(source);
+            return (await _dbContext.SaveChangesAsync() >= 0);
+        }
         public async Task<IEnumerable<Source>> GetSourcesAsync()
         {
             return await _dbContext.Sources.ToListAsync();
@@ -78,9 +88,22 @@ namespace LeadManager.Infrastructure.Data.Repositories
             return await _dbContext.Sources.Where(l => l.SourceId == Id).FirstOrDefaultAsync();
         }
 
+        public async Task<bool> DeleteSource(Source source)
+        {
+            _dbContext.Remove(source);
+            return (await _dbContext.SaveChangesAsync() >= 0);
+        }
+
         #endregion
 
         #region Supplier
+
+        public async Task<bool> AddSupplierAsync(Supplier supplier)
+        {
+            _dbContext.Add(supplier);
+            return (await _dbContext.SaveChangesAsync() >= 0);
+        }
+
         public async Task<IEnumerable<Supplier>> GetSuppliersAsync()
         {
             return await _dbContext.Suppliers.ToListAsync();
@@ -91,11 +114,17 @@ namespace LeadManager.Infrastructure.Data.Repositories
             return await _dbContext.Suppliers.Where(l => l.SupplierId == Id).FirstOrDefaultAsync();
         }
 
-        public Task<bool> SaveChangesAsync()
+        public async Task<bool> DeleteSupplier(Supplier supplier)
         {
-            throw new NotImplementedException();
-        }        
+            _dbContext.Remove(supplier);
+            return (await _dbContext.SaveChangesAsync() >= 0);
+        }
 
         #endregion
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            return (await _dbContext.SaveChangesAsync() >= 0);
+        }
     }
 }

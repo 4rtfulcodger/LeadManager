@@ -27,7 +27,19 @@ builder.Services.AddControllers(options =>
     //If Accept header value in the request is not supported, give back a 406 response saying it is not supported
     options.ReturnHttpNotAcceptable = true; 
 } 
-).AddNewtonsoftJson()
+).AddNewtonsoftJson(options =>
+{
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+
+    //Uncomment below section to remove camel case output format (default)
+    //if (options.SerializerSettings.ContractResolver != null)
+    //{
+    //    var castedResolver = options.SerializerSettings.ContractResolver as DefaultContractResolver;
+    //    castedResolver.NamingStrategy = null;
+    //}
+
+}
+            )
 .AddXmlDataContractSerializerFormatters(); //Add support for responses in XML format 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
