@@ -101,21 +101,21 @@ namespace LeadManager.API.Controllers
             if (leadEntity == null)
                 return NotFound();
 
-            var updatedLead = _mapper.Map<LeadForUpdateDto>(leadEntity);
+            var leadDto = _mapper.Map<LeadForUpdateDto>(leadEntity);
 
-            patchDocument.ApplyTo(updatedLead);
+            patchDocument.ApplyTo(leadDto);
 
-            var supplier = await _leadInfoRepository.GetSupplierWithIdAsync(updatedLead.SupplierId);
+            var supplier = await _leadInfoRepository.GetSupplierWithIdAsync(leadDto.SupplierId);
 
             if (supplier == null)
                 return NotFound();
 
-            var source = await _leadInfoRepository.GetSourceWithIdAsync(updatedLead.SourceId);
+            var source = await _leadInfoRepository.GetSourceWithIdAsync(leadDto.SourceId);
 
             if (source == null)
                 return NotFound();
 
-            _mapper.Map(updatedLead, leadEntity);
+            _mapper.Map(leadDto, leadEntity);
             bool updateresult =  await _leadInfoRepository.UpdateLeadAsync(leadId);
 
             if (updateresult)

@@ -15,11 +15,13 @@ namespace LeadManager.Core.Interfaces
         #region Source
         Task<IEnumerable<Source>> GetSourcesAsync();
         Task<bool> AddSourceAsync(Source source);
+        Task<bool> UpdateSourceAsync(int Id);
         Task<Source?> GetSourceWithIdAsync(int Id);
         Task<bool> DeleteSource(Source lead);
         #endregion
         #region Supplier
         Task<bool> AddSupplierAsync(Supplier supplier);
+        Task<bool> UpdateSupplierAsync(int Id);
         Task<IEnumerable<Supplier>> GetSuppliersAsync();
         Task<Supplier?> GetSupplierWithIdAsync(int Id);
         Task<bool> DeleteSupplier(Supplier supplier);

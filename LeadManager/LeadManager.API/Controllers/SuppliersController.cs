@@ -3,6 +3,7 @@ using LeadManager.API.Models;
 using LeadManager.Core.Entities;
 using LeadManager.Core.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LeadManager.API.Controllers
@@ -52,6 +53,30 @@ namespace LeadManager.API.Controllers
             bool addLeadSuccess = await _leadInfoRepository.AddSupplierAsync(newSupplier);
 
             return CreatedAtRoute("GetSource", new { id = newSupplier.SupplierId }, _mapper.Map<SupplierDto>(newSupplier));
+
+        }
+
+        [HttpPatch("{supplierId}")]
+        public async Task<ActionResult<LeadDto>> UpdateSupplier(JsonPatchDocument<SupplierForUpdateDto> patchDocument, int supplierId)
+        {
+            var supplierEntity = await _leadInfoRepository.GetSupplierWithIdAsync(supplierId);
+            if (supplierEntity == null)
+                return NotFound();
+
+            var supplierDto = _mapper.Map<SupplierForUpdateDto>(supplierEntity);
+            patchDocument.ApplyTo(supplierDto);
+
+            _mapper.Map(supplierDto, supplierEntity);
+            bool updateresult = await _leadInfoRepository.UpdateSupplierAsync(supplierId);
+
+            if (updateresult)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return Problem();
+            }
 
         }
 

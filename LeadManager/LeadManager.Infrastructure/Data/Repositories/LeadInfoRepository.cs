@@ -78,6 +78,12 @@ namespace LeadManager.Infrastructure.Data.Repositories
             _dbContext.Add(source);
             return (await _dbContext.SaveChangesAsync() >= 0);
         }
+
+        public async Task<bool> UpdateSourceAsync(int Id)
+        {
+            return (await _dbContext.SaveChangesAsync() >= 0);
+        }
+
         public async Task<IEnumerable<Source>> GetSourcesAsync()
         {
             return await _dbContext.Sources.ToListAsync();
@@ -104,6 +110,11 @@ namespace LeadManager.Infrastructure.Data.Repositories
             return (await _dbContext.SaveChangesAsync() >= 0);
         }
 
+        public async Task<bool> UpdateSupplierAsync(int Id)
+        {
+            return (await _dbContext.SaveChangesAsync() >= 0);
+        }
+
         public async Task<IEnumerable<Supplier>> GetSuppliersAsync()
         {
             return await _dbContext.Suppliers.ToListAsync();
@@ -125,6 +136,6 @@ namespace LeadManager.Infrastructure.Data.Repositories
         public async Task<bool> SaveChangesAsync()
         {
             return (await _dbContext.SaveChangesAsync() >= 0);
-        }
+        }        
     }
 }
