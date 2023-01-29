@@ -59,7 +59,8 @@ namespace LeadManager.Infrastructure.Data
                     FirstName = "Malith",
                     LastName = "Jayawardana",
                     Email = configuration["AuthSettings:AdminEmail"],
-                    UserName = configuration["AuthSettings:AdminEmail"]
+                    UserName = configuration["AuthSettings:AdminEmail"],
+                    IsActive= true
                 };
 
                 var result = await userManager.CreateAsync(user, configuration["AuthSettings:AdminPW"]);

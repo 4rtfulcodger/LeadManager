@@ -90,10 +90,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+
 
 app.UseRouting().UseEndpoints(endpoints =>
 {
+    app.UseAuthorization();
     endpoints.MapHealthChecks("/healthcheck");
 });
 app.MapControllers();

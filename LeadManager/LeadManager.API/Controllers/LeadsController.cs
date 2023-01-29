@@ -9,11 +9,14 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Text.Json;
 using LeadManager.Core.Helpers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LeadManager.API.Controllers
 {
-    [Route("api/leads")]
     [ApiController]
+    [Route("api/leads")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class LeadsController : ControllerBase
     {
         private readonly ILogger<FilesController> _logger;
