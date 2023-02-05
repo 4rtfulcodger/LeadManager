@@ -17,4 +17,9 @@ namespace LeadManager.Core.Entities
         [NotMapped]
         public List<string> UserRoles { get; set; } = new List<string>();
     }
+
+    public class UserRole
+    {
+        public string RoleName { get; set; }
+    }
 }

@@ -8,6 +8,11 @@ namespace LeadManager.API.Profiles
     {
         public LeadInfoProfile()
         {
+            #region User
+            CreateMap<User, UserForCreateDto>().ReverseMap();
+            CreateMap<User, UserForDisplayDto>();
+            #endregion
+
             #region Source
             CreateMap<Source, SourceDto>().ForMember(s => s.Id, opt => opt.MapFrom(sd => sd.SourceId)).ReverseMap();
             CreateMap<Source, SourceForCreateDto>().ReverseMap();
