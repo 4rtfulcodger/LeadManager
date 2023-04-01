@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using LeadManager.API.Models;
 using LeadManager.Core.Entities;
 using LeadManager.Core.Interfaces;
+using LeadManager.Core.ViewModels;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 

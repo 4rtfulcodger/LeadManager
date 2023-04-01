@@ -1,4 +1,6 @@
-﻿using LeadManager.API.Models;
+﻿
+
+using LeadManager.Core.ViewModels;
 
 namespace LeadManager.API
 {

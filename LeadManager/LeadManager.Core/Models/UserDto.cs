@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LeadManager.API.Models
+namespace LeadManager.Core.ViewModels
 {
     public class UserDto
     {

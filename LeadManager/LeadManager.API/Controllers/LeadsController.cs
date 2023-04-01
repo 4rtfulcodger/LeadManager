@@ -1,16 +1,13 @@
 ﻿using AutoMapper;
-using LeadManager.API.Models;
 using LeadManager.Core.Entities;
 using LeadManager.Core.Interfaces;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using System.Text.Json;
 using LeadManager.Core.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using LeadManager.Core.ViewModels;
 
 namespace LeadManager.API.Controllers
 {

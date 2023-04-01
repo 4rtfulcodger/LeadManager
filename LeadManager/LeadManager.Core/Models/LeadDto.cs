@@ -1,6 +1,6 @@
 ﻿using LeadManager.Core.Entities;
 
-namespace LeadManager.API.Models
+namespace LeadManager.Core.ViewModels
 {
     public class LeadDto
     {

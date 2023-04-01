@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using LeadManager.API.Models;
 using LeadManager.Core.Entities;
+using LeadManager.Core.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
