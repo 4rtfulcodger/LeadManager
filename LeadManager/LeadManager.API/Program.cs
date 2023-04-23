@@ -1,3 +1,4 @@
+using LeadManager.API.BusinessLogic.Common;
 using LeadManager.Core.Entities;
 using LeadManager.Core.Entities.Source;
 using LeadManager.Core.Interfaces;
@@ -76,6 +77,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 builder.Services.AddTransient<IEmailService, TestEmailService>();
 builder.Services.AddScoped<ISourceService, SourceService>();
+builder.Services.AddScoped<IApiEndpointValidation, EndpointValidation>();
 builder.Services.AddScoped<ILeadInfoRepository, LeadInfoRepository>();
 builder.Services.AddDbContext<LeadManagerDbContext>(options => options.UseSqlServer(builder.Configuration["ConnectionStrings:LeadManagerDb"]));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

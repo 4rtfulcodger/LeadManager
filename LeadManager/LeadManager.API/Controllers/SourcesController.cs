@@ -14,30 +14,36 @@ namespace LeadManager.API.Controllers
         private readonly ILogger<FilesController> _logger;
         private readonly IMapper _mapper;
         private readonly ISourceService _sourceService;
+        private readonly IApiEndpointValidation _apiEndpointValidation;
 
         public SourcesController(ISourceService sourceService,
             ILogger<FilesController> logger,
-            IMapper mapper)
+            IMapper mapper,
+            IApiEndpointValidation apiEndpointValidation)
         {
             _logger = logger ?? throw new ArgumentException(nameof(logger));
             _mapper = mapper ?? throw new ArgumentException(nameof(mapper));
-            _sourceService = sourceService ?? throw new ArgumentException(nameof(sourceService)); ;
+            _sourceService = sourceService ?? throw new ArgumentException(nameof(sourceService));
+            _apiEndpointValidation = apiEndpointValidation ?? throw new ArgumentException(nameof(apiEndpointValidation));
         }       
 
         [HttpGet()]
         public async Task<ActionResult<IEnumerable<SourceDto>>> GetSources()
         {
             //Need to add a filter parameter
-            return Ok(_mapper.Map<SourceDto[]>(await _sourceService.GetSourcesAsync()));
+            var searchResult = _mapper.Map<SourceDto[]>(await _sourceService.GetSourcesAsync());
+            if(!_apiEndpointValidation.IsValidDeleteResult(searchResult))
+                return NotFound();
+
+            return Ok(searchResult);
         }
 
         [HttpGet("{id}", Name = "GetSource")]
         public async Task<ActionResult<SourceDto>> GetSources(int id)
         {
             var sourceToReturn = await _sourceService.GetSourceWithIdAsync(id);
-
-            if (sourceToReturn == null)
-                return NotFound();
+           if(!_apiEndpointValidation.IsValidDeleteResult(sourceToReturn))
+                return NotFound(sourceToReturn);
 
             return Ok(_mapper.Map<SourceDto>(sourceToReturn));
         }
@@ -46,7 +52,8 @@ namespace LeadManager.API.Controllers
         public async Task<ActionResult<SourceDto>> CreateSource(SourceForCreateDto sourceDto)
         {
             var newSource = _mapper.Map<Source>(sourceDto);
-            bool addLeadSuccess = await _sourceService.CreateSourceAsync(newSource);
+            if(!_apiEndpointValidation.IsValidCreateResult(await _sourceService.CreateSourceAsync(newSource)))
+                return BadRequest();
 
             return CreatedAtRoute("GetSource", new { id = newSource.SourceId }, _mapper.Map<SourceDto>(newSource)); 
 
@@ -56,49 +63,28 @@ namespace LeadManager.API.Controllers
         public async Task<ActionResult<LeadDto>> UpdateSource(JsonPatchDocument<SourceForUpdateDto> patchDocument, int sourceId)
         {
             var sourceEntity = await _sourceService.GetSourceWithIdAsync(sourceId);
-            if (sourceEntity == null)
-                return NotFound();
+            _apiEndpointValidation.IsValidDeleteResult(sourceEntity);
 
             var sourceDto = _mapper.Map<SourceForUpdateDto>(sourceEntity);
             patchDocument.ApplyTo(sourceDto);                       
 
             _mapper.Map(sourceDto, sourceEntity);
-            bool updateresult = await _sourceService.UpdateSourceAsync(sourceId);
+            if(!_apiEndpointValidation.IsValidUpdateResult(await _sourceService.UpdateSourceAsync(sourceId)))
+                return BadRequest();
 
-            if (updateresult)
-            {
-                return NoContent();
-            }
-            else
-            {
-                return Problem();
-            }
-
+            return NoContent();
         }
 
         [HttpDelete("{id}", Name = "DeleteSource")]
         public async Task<ActionResult<SourceDto>> DeleteSource(int id)
-        {
-            //Validation and filter logic should be removed from controllers
-            //Temporarily adding these for testing
-
+        {         
             _logger.Log(LogLevel.Debug, "Request to SourcesController, DeleteSource action");
 
             var sourceToDelete = await _sourceService.GetSourceWithIdAsync(id);
+            _apiEndpointValidation.IsValidDeleteResult(sourceToDelete);
 
-            if (sourceToDelete == null)
-                return NotFound();
-
-            var deleteResult = await _sourceService.DeleteSource(sourceToDelete);
-
-            if (deleteResult)
-            {
-                return NoContent();
-            }
-            else
-            {
-                return Problem();
-            }
+            _apiEndpointValidation.IsValidUpdateResult(await _sourceService.DeleteSource(sourceToDelete));
+            return NoContent();
         }
     }
 }
