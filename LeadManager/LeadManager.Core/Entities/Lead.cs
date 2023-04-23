@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LeadManager.Core.Entities.Source;
 
 namespace LeadManager.Core.Entities
 {
@@ -15,7 +16,7 @@ namespace LeadManager.Core.Entities
         public int LeadId { get; set; }
 
         [ForeignKey("SourceId")]
-        public Source Source { get; set; }
+        public Source.Source Source { get; set; }
         public int SourceId { get; set; }
 
         [ForeignKey("SupplierId")]

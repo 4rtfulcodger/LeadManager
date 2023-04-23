@@ -1,4 +1,5 @@
 ﻿using LeadManager.Core.Entities;
+using LeadManager.Core.Entities.Source;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

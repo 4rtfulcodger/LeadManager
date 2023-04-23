@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LeadManager.Core.Entities;
+using LeadManager.Core.Entities.Source;
 using LeadManager.Core.ViewModels;
 
 namespace LeadManager.API.Profiles

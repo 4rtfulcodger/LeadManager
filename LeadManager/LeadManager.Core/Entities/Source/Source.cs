@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LeadManager.Core.Entities
+namespace LeadManager.Core.Entities.Source
 {
     public class Source
     {
@@ -24,7 +24,7 @@ namespace LeadManager.Core.Entities
         public Source(string name, string? description)
         {
             Name = name;
-            Description = description;  
+            Description = description;
         }
     }
 }
