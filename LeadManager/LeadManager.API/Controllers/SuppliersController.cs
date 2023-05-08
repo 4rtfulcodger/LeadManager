@@ -15,14 +15,14 @@ namespace LeadManager.API.Controllers
         private readonly ILogger<FilesController> _logger;
         private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
-        public ILeadInfoRepository _leadInfoRepository;
+        public ISupplierService _supplierService;
 
-        public SuppliersController(ILeadInfoRepository leadInfoRepository,
+        public SuppliersController(ISupplierService supplierService,
             ILogger<FilesController> logger,
             IEmailService emailService,
             IMapper mapper)
         {
-            _leadInfoRepository = leadInfoRepository ?? throw new ArgumentException(nameof(leadInfoRepository)); ;
+            _supplierService = supplierService ?? throw new ArgumentException(nameof(supplierService)); ;
             _logger = logger ?? throw new ArgumentException(nameof(logger));
             _emailService = emailService ?? throw new ArgumentException(nameof(emailService));
             _mapper = mapper;
@@ -32,13 +32,13 @@ namespace LeadManager.API.Controllers
         [HttpGet()]
         public async Task<ActionResult<IEnumerable<SupplierDto>>> GetSuppliers()
         {
-            return Ok(_mapper.Map<SupplierDto[]>(await _leadInfoRepository.GetSuppliersAsync()));
+            return Ok(_mapper.Map<SupplierDto[]>(await _supplierService.GetSuppliersAsync()));
         }
 
         [HttpGet("{id}", Name = "GetSupplier")]
         public async Task<ActionResult<IEnumerable<SupplierDto>>> GetSupplier(int id)
         {
-            var supplier = await _leadInfoRepository.GetSupplierWithIdAsync(id);
+            var supplier = await _supplierService.GetSupplierWithIdAsync(id);
 
             if (supplier == null)
                 return NotFound();
@@ -50,7 +50,7 @@ namespace LeadManager.API.Controllers
         public async Task<ActionResult<SupplierDto>> CreateSupplier(SupplierForCreateDto supplierDto)
         {
             var newSupplier = _mapper.Map<Supplier>(supplierDto);
-            bool addLeadSuccess = await _leadInfoRepository.AddSupplierAsync(newSupplier);
+            bool addLeadSuccess = await _supplierService.AddSupplierAsync(newSupplier);
 
             return CreatedAtRoute("GetSource", new { id = newSupplier.SupplierId }, _mapper.Map<SupplierDto>(newSupplier));
 
@@ -59,7 +59,7 @@ namespace LeadManager.API.Controllers
         [HttpPatch("{supplierId}")]
         public async Task<ActionResult<LeadDto>> UpdateSupplier(JsonPatchDocument<SupplierForUpdateDto> patchDocument, int supplierId)
         {
-            var supplierEntity = await _leadInfoRepository.GetSupplierWithIdAsync(supplierId);
+            var supplierEntity = await _supplierService.GetSupplierWithIdAsync(supplierId);
             if (supplierEntity == null)
                 return NotFound();
 
@@ -67,7 +67,7 @@ namespace LeadManager.API.Controllers
             patchDocument.ApplyTo(supplierDto);
 
             _mapper.Map(supplierDto, supplierEntity);
-            bool updateresult = await _leadInfoRepository.UpdateSupplierAsync(supplierId);
+            bool updateresult = await _supplierService.UpdateSupplierAsync(supplierId);
 
             if (updateresult)
             {
@@ -88,12 +88,12 @@ namespace LeadManager.API.Controllers
 
             _logger.Log(LogLevel.Debug, "Request to SuppliersController, DeleteSupplier action");
 
-            var supplierToDelete = await _leadInfoRepository.GetSupplierWithIdAsync(id);
+            var supplierToDelete = await _supplierService.GetSupplierWithIdAsync(id);
 
             if (supplierToDelete == null)
                 return NotFound();
 
-            var deleteResult = await _leadInfoRepository.DeleteSupplier(supplierToDelete);
+            var deleteResult = await _supplierService.DeleteSupplier(supplierToDelete);
 
             if (deleteResult)
             {

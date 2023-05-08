@@ -8,6 +8,8 @@ using LeadManager.Core.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using LeadManager.Core.ViewModels;
+using LeadManager.Core.Entities.Source;
+using LeadManager.Core.Entities.Supplier;
 
 namespace LeadManager.API.Controllers
 {
@@ -20,15 +22,21 @@ namespace LeadManager.API.Controllers
         private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
         public ILeadInfoRepository _leadInfoRepository;
+        public ISourceService _sourceService;
+        public ISupplierService _supplierService;
 
         public LeadsController(ILeadInfoRepository leadInfoRepository,
             ILogger<FilesController> logger,
             IEmailService emailService,
+            ISourceService sourceService,
+            ISupplierService supplierService,
             IMapper mapper)
         {
             _leadInfoRepository = leadInfoRepository ?? throw new ArgumentException(nameof(leadInfoRepository)); ;
             _logger = logger ?? throw new ArgumentException(nameof(logger));
             _emailService = emailService ?? throw new ArgumentException(nameof(emailService));
+            _sourceService = sourceService ?? throw new ArgumentException(nameof(sourceService));
+            _supplierService = supplierService ?? throw new ArgumentException(nameof(supplierService));
             _mapper = mapper;
         }
 
@@ -66,12 +74,12 @@ namespace LeadManager.API.Controllers
         [HttpPost]
         public async Task<ActionResult<LeadDto>> CreateLead(LeadForCreateDto leadDto)
         {
-            var supplier = await _leadInfoRepository.GetSupplierWithIdAsync(leadDto.SupplierId);
+            var supplier = await _supplierService.GetSupplierWithIdAsync(leadDto.SupplierId);
 
             if (supplier == null)
                 return NotFound();
 
-            var source = await _leadInfoRepository.GetSourceWithIdAsync(leadDto.SourceId);
+            var source = await _sourceService.GetSourceWithIdAsync(leadDto.SourceId);
 
             if (source == null)
                 return NotFound();
@@ -105,12 +113,12 @@ namespace LeadManager.API.Controllers
 
             patchDocument.ApplyTo(leadDto);
 
-            var supplier = await _leadInfoRepository.GetSupplierWithIdAsync(leadDto.SupplierId);
+            var supplier = await _supplierService.GetSupplierWithIdAsync(leadDto.SupplierId);
 
             if (supplier == null)
                 return NotFound();
 
-            var source = await _leadInfoRepository.GetSourceWithIdAsync(leadDto.SourceId);
+            var source = await _sourceService.GetSourceWithIdAsync(leadDto.SourceId);
 
             if (source == null)
                 return NotFound();
