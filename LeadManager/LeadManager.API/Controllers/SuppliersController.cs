@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LeadManager.Core.Entities;
+using LeadManager.Core.Entities.Supplier;
 using LeadManager.Core.Interfaces;
 using LeadManager.Core.ViewModels;
 using Microsoft.AspNetCore.JsonPatch;
