@@ -2,6 +2,7 @@
 using LeadManager.Core.Entities;
 using LeadManager.Core.Entities.Supplier;
 using LeadManager.Core.Interfaces;
+using LeadManager.Core.Interfaces.Supplier;
 using LeadManager.Core.ViewModels;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;

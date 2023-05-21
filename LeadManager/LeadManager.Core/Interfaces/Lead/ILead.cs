@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LeadManager.Core.Interfaces
+namespace LeadManager.Core.Interfaces.Lead
 {
-    internal class ILead
+    public class ILead
     {
     }
 }

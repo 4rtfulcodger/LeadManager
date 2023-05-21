@@ -1,8 +1,8 @@
 ﻿using LeadManager.Core.Entities.Source;
-using LeadManager.Core.Interfaces;
+using LeadManager.Core.Interfaces.Source;
 using Microsoft.Extensions.Logging;
 
-namespace LeadManager.Infrastructure.Services 
+namespace LeadManager.Infrastructure.Services
 {
     public class SourceService : ISourceService
     {

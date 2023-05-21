@@ -1,5 +1,6 @@
 ﻿using LeadManager.Core.Entities.Source;
 using LeadManager.Core.Entities.Supplier;
+using LeadManager.Core.Interfaces.Supplier;
 using LeadManager.Infrastructure.Data.Repositories;
 using Microsoft.Extensions.Logging;
 using System;

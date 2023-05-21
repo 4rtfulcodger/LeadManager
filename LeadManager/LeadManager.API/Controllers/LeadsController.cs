@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using LeadManager.Core.Entities;
 using LeadManager.Core.Interfaces;
+using LeadManager.Core.Interfaces.Lead;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -8,8 +8,10 @@ using LeadManager.Core.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using LeadManager.Core.ViewModels;
-using LeadManager.Core.Entities.Source;
-using LeadManager.Core.Entities.Supplier;
+using LeadManager.Core.Entities.Lead;
+using LeadManager.Core.Interfaces.Source;
+using LeadManager.Core.Interfaces.Supplier;
+using LeadManager.Infrastructure.Services;
 
 namespace LeadManager.API.Controllers
 {
@@ -20,23 +22,23 @@ namespace LeadManager.API.Controllers
     {
         private readonly ILogger<FilesController> _logger;
         private readonly IEmailService _emailService;
-        private readonly IMapper _mapper;
-        public ILeadInfoRepository _leadInfoRepository;
+        private readonly IMapper _mapper;        
+        public ILeadService _leadService;
         public ISourceService _sourceService;
         public ISupplierService _supplierService;
 
-        public LeadsController(ILeadInfoRepository leadInfoRepository,
-            ILogger<FilesController> logger,
+        public LeadsController(ILogger<FilesController> logger,
             IEmailService emailService,
             ISourceService sourceService,
+            ILeadService leadService,
             ISupplierService supplierService,
             IMapper mapper)
         {
-            _leadInfoRepository = leadInfoRepository ?? throw new ArgumentException(nameof(leadInfoRepository)); ;
             _logger = logger ?? throw new ArgumentException(nameof(logger));
             _emailService = emailService ?? throw new ArgumentException(nameof(emailService));
             _sourceService = sourceService ?? throw new ArgumentException(nameof(sourceService));
             _supplierService = supplierService ?? throw new ArgumentException(nameof(supplierService));
+            _leadService = leadService ?? throw new ArgumentException(nameof(leadService));
             _mapper = mapper;
         }
 
@@ -47,7 +49,7 @@ namespace LeadManager.API.Controllers
             //Validation and filter logic should be removed from controllers
             //Temporarily adding these for testing
 
-            var leads = await _leadInfoRepository.GetLeadsAsync(leadFilter);
+            var leads = await _leadService.GetLeadsAsync(leadFilter);
 
             if (leads.Count() == 0)
                 return NotFound();
@@ -63,7 +65,7 @@ namespace LeadManager.API.Controllers
 
             _logger.Log(LogLevel.Debug, "GET Request to LeadsController, GetLead action");
                         
-            var leadToReturn = await _leadInfoRepository.GetLeadWithIdAsync(id, true, true);
+            var leadToReturn = await _leadService.GetLeadWithIdAsync(id, true, true);
 
             if (leadToReturn == null)
                 return NotFound();
@@ -86,7 +88,7 @@ namespace LeadManager.API.Controllers
 
             var newLead = _mapper.Map<Lead>(leadDto);
 
-            bool addLeadSuccess = await _leadInfoRepository.AddLeadAsync(newLead);
+            bool addLeadSuccess = await _leadService.AddLeadAsync(newLead);
 
             if (addLeadSuccess)
             {
@@ -105,7 +107,7 @@ namespace LeadManager.API.Controllers
         [HttpPatch("{leadId}")]
         public async Task<ActionResult<LeadDto>> UpdateLead(JsonPatchDocument<LeadForUpdateDto> patchDocument, int leadId)
         {
-            var leadEntity = await _leadInfoRepository.GetLeadWithIdAsync(leadId, false, false);
+            var leadEntity = await _leadService.GetLeadWithIdAsync(leadId, false, false);
             if (leadEntity == null)
                 return NotFound();
 
@@ -124,7 +126,7 @@ namespace LeadManager.API.Controllers
                 return NotFound();
 
             _mapper.Map(leadDto, leadEntity);
-            bool updateresult =  await _leadInfoRepository.UpdateLeadAsync(leadId);
+            bool updateresult =  await _leadService.UpdateLeadAsync(leadId);
 
             if (updateresult)
             {
@@ -145,12 +147,12 @@ namespace LeadManager.API.Controllers
 
             _logger.Log(LogLevel.Debug, "Request to LeadsController, DeleteLead action");                       
 
-            var leadToDelete = await _leadInfoRepository.GetLeadWithIdAsync(id);
+            var leadToDelete = await _leadService.GetLeadWithIdAsync(id);
 
             if (leadToDelete == null)
                 return NotFound();
 
-            var deleteResult = await _leadInfoRepository.DeleteLead(leadToDelete);
+            var deleteResult = await _leadService.DeleteLead(leadToDelete);
 
             if (deleteResult)
             {

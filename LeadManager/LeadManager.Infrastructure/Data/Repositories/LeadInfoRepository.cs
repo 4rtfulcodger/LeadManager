@@ -1,8 +1,8 @@
-﻿using LeadManager.Core.Entities;
+﻿using LeadManager.Core.Entities.Lead;
 using LeadManager.Core.Entities.Source;
 using LeadManager.Core.Entities.Supplier;
 using LeadManager.Core.Helpers;
-using LeadManager.Core.Interfaces;
+using LeadManager.Core.Interfaces.Lead;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
