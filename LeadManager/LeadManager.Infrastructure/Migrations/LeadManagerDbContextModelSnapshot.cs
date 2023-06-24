@@ -22,7 +22,7 @@ namespace LeadManager.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("LeadManager.Core.Entities.Lead", b =>
+            modelBuilder.Entity("LeadManager.Core.Entities.Lead.Lead", b =>
                 {
                     b.Property<int>("LeadId")
                         .ValueGeneratedOnAdd()
@@ -52,51 +52,9 @@ namespace LeadManager.Infrastructure.Migrations
                     b.HasIndex("SupplierId");
 
                     b.ToTable("Leads");
-
-                    b.HasData(
-                        new
-                        {
-                            LeadId = 1,
-                            Description = "Lead1 with Source1 and Supplier1",
-                            Name = "Lead1",
-                            SourceId = 1,
-                            SupplierId = 1
-                        },
-                        new
-                        {
-                            LeadId = 2,
-                            Description = "Lead2 with Source2 and Supplier2",
-                            Name = "Lead2",
-                            SourceId = 2,
-                            SupplierId = 2
-                        },
-                        new
-                        {
-                            LeadId = 3,
-                            Description = "Lead3 with Source3 and Supplier3",
-                            Name = "Lead3",
-                            SourceId = 3,
-                            SupplierId = 3
-                        },
-                        new
-                        {
-                            LeadId = 4,
-                            Description = "Lead4 with Source1 and Supplier1",
-                            Name = "Lead4",
-                            SourceId = 1,
-                            SupplierId = 1
-                        },
-                        new
-                        {
-                            LeadId = 5,
-                            Description = "Lead5 with Source1 and Supplier1",
-                            Name = "Lead5",
-                            SourceId = 1,
-                            SupplierId = 1
-                        });
                 });
 
-            modelBuilder.Entity("LeadManager.Core.Entities.Source", b =>
+            modelBuilder.Entity("LeadManager.Core.Entities.Source.Source", b =>
                 {
                     b.Property<int>("SourceId")
                         .ValueGeneratedOnAdd()
@@ -113,32 +71,15 @@ namespace LeadManager.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<Guid>("SourceRef")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("SourceId");
 
                     b.ToTable("Sources");
-
-                    b.HasData(
-                        new
-                        {
-                            SourceId = 1,
-                            Description = "Source1 description",
-                            Name = "Source1"
-                        },
-                        new
-                        {
-                            SourceId = 2,
-                            Description = "Source2 description",
-                            Name = "Source2"
-                        },
-                        new
-                        {
-                            SourceId = 3,
-                            Description = "Source3 description",
-                            Name = "Source3"
-                        });
                 });
 
-            modelBuilder.Entity("LeadManager.Core.Entities.Supplier", b =>
+            modelBuilder.Entity("LeadManager.Core.Entities.Supplier.Supplier", b =>
                 {
                     b.Property<int>("SupplierId")
                         .ValueGeneratedOnAdd()
@@ -158,26 +99,6 @@ namespace LeadManager.Infrastructure.Migrations
                     b.HasKey("SupplierId");
 
                     b.ToTable("Suppliers");
-
-                    b.HasData(
-                        new
-                        {
-                            SupplierId = 1,
-                            Description = "Supplier1 description",
-                            Name = "Supplier1"
-                        },
-                        new
-                        {
-                            SupplierId = 2,
-                            Description = "Supplier2 description",
-                            Name = "Supplier2"
-                        },
-                        new
-                        {
-                            SupplierId = 3,
-                            Description = "Supplier3 description",
-                            Name = "Supplier3"
-                        });
                 });
 
             modelBuilder.Entity("LeadManager.Core.Entities.User", b =>
@@ -389,15 +310,15 @@ namespace LeadManager.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("LeadManager.Core.Entities.Lead", b =>
+            modelBuilder.Entity("LeadManager.Core.Entities.Lead.Lead", b =>
                 {
-                    b.HasOne("LeadManager.Core.Entities.Source", "Source")
+                    b.HasOne("LeadManager.Core.Entities.Source.Source", "Source")
                         .WithMany()
                         .HasForeignKey("SourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LeadManager.Core.Entities.Supplier", "Supplier")
+                    b.HasOne("LeadManager.Core.Entities.Supplier.Supplier", "Supplier")
                         .WithMany()
                         .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Cascade)

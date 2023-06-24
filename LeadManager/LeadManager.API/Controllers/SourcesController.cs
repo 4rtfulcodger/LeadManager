@@ -33,7 +33,7 @@ namespace LeadManager.API.Controllers
         {
             //Need to add a filter parameter
             var searchResult = _mapper.Map<SourceDto[]>(await _sourceService.GetSourcesAsync());
-            if(!_apiEndpointValidation.IsValidDeleteResult(searchResult))
+            if(!searchResult.Any())
                 return NotFound();
 
             return Ok(searchResult);
@@ -43,7 +43,7 @@ namespace LeadManager.API.Controllers
         public async Task<ActionResult<SourceDto>> GetSources(int id)
         {
             var sourceToReturn = await _sourceService.GetSourceWithIdAsync(id);
-           if(!_apiEndpointValidation.IsValidDeleteResult(sourceToReturn))
+           if(sourceToReturn == null)
                 return NotFound(sourceToReturn);
 
             return Ok(_mapper.Map<SourceDto>(sourceToReturn));
@@ -53,7 +53,7 @@ namespace LeadManager.API.Controllers
         public async Task<ActionResult<SourceDto>> CreateSource(SourceForCreateDto sourceDto)
         {
             var newSource = _mapper.Map<Source>(sourceDto);
-            if(!_apiEndpointValidation.IsValidCreateResult(await _sourceService.CreateSourceAsync(newSource)))
+            if(!(await _sourceService.CreateSourceAsync(newSource)))
                 return BadRequest();
 
             return CreatedAtRoute("GetSource", new { id = newSource.SourceId }, _mapper.Map<SourceDto>(newSource)); 
@@ -70,7 +70,7 @@ namespace LeadManager.API.Controllers
             patchDocument.ApplyTo(sourceDto);                       
 
             _mapper.Map(sourceDto, sourceEntity);
-            if(!_apiEndpointValidation.IsValidUpdateResult(await _sourceService.UpdateSourceAsync(sourceId)))
+            if(!(await _sourceService.UpdateSourceAsync(sourceId)))
                 return BadRequest();
 
             return NoContent();

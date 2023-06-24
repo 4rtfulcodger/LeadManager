@@ -19,9 +19,10 @@ namespace LeadManager.Infrastructure.Services
 
         public async Task<bool> CreateSourceAsync(Source sourceDto)
         {
+           sourceDto.SourceRef = Guid.NewGuid();
            return await _sourceRepository.AddSourceAsync(sourceDto);
         }
-
+       
         //Need to add a filter parameter
         public async Task<IEnumerable<Source>> GetSourcesAsync()
         {            

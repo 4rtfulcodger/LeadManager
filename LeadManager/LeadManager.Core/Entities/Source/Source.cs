@@ -13,6 +13,8 @@ namespace LeadManager.Core.Entities.Source
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int SourceId { get; set; }
+                
+        public Guid SourceRef { get; set; }
 
         [Required]
         [MaxLength(50)]

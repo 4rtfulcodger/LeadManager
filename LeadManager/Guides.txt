@@ -1,0 +1,14 @@
+Entity Framework:
+
+To add a code first migration, use the command in the following format, and run it in the packagemanager console
+
+-p refers to the project where the migration is being added
+-s refers to the startup project
+
+PM> dotnet ef migrations add {MigrationName} -p LeadManager.Infrastructure -s LeadManager.API
+
+To update the database with added migrations use the command in the following format,
+
+-s refers to the startup project
+PM> dotnet ef database update  -s LeadManager.API
+

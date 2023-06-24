@@ -19,6 +19,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{E32BC480-38C3-4641-84E2-B4706527B255}"
 	ProjectSection(SolutionItems) = preProject
 		Entities.txt = Entities.txt
+		Guides.txt = Guides.txt
 		RequirementSpec.txt = RequirementSpec.txt
 		ToDo.txt = ToDo.txt
 	EndProjectSection

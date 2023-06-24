@@ -5,7 +5,7 @@
 namespace LeadManager.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedforeignkeysinLead : Migration
+    public partial class initalCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
