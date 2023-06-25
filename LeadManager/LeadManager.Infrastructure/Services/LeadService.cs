@@ -20,6 +20,8 @@ namespace LeadManager.Infrastructure.Services
 
         public async Task<bool> AddLeadAsync(Lead lead)
         {
+            lead.LeadRef = LeadHelper.GenerateLeadReference();
+
             return await _sourceRepository.AddLeadAsync(lead);
         }
 

@@ -16,6 +16,8 @@ namespace LeadManager.Core.Entities.Lead
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int LeadId { get; set; }
 
+        public string LeadRef { get; set; }
+
         [ForeignKey("SourceId")]
         public Source.Source Source { get; set; }
         public int SourceId { get; set; }
