@@ -29,7 +29,7 @@ namespace LeadManager.API.Controllers
         }       
 
         [HttpGet()]
-        public async Task<ActionResult<IEnumerable<SourceDto>>> GetSources()
+        public async Task<IActionResult> GetSources()
         {
             //Need to add a filter parameter
             var searchResult = _mapper.Map<SourceDto[]>(await _sourceService.GetSourcesAsync());
@@ -40,7 +40,7 @@ namespace LeadManager.API.Controllers
         }
 
         [HttpGet("{id}", Name = "GetSource")]
-        public async Task<ActionResult<SourceDto>> GetSources(int id)
+        public async Task<IActionResult> GetSources(int id)
         {
             var sourceToReturn = await _sourceService.GetSourceWithIdAsync(id);
            if(sourceToReturn == null)
@@ -50,7 +50,7 @@ namespace LeadManager.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<SourceDto>> CreateSource(SourceForCreateDto sourceDto)
+        public async Task<IActionResult> CreateSource(SourceForCreateDto sourceDto)
         {
             var newSource = _mapper.Map<Source>(sourceDto);
             if(!(await _sourceService.CreateSourceAsync(newSource)))
@@ -61,7 +61,7 @@ namespace LeadManager.API.Controllers
         }
 
         [HttpPatch("{sourceId}")]
-        public async Task<ActionResult<LeadDto>> UpdateSource(JsonPatchDocument<SourceForUpdateDto> patchDocument, int sourceId)
+        public async Task<IActionResult> UpdateSource(JsonPatchDocument<SourceForUpdateDto> patchDocument, int sourceId)
         {
             var sourceEntity = await _sourceService.GetSourceWithIdAsync(sourceId);
             _apiEndpointValidation.IsValidDeleteResult(sourceEntity);
@@ -77,7 +77,7 @@ namespace LeadManager.API.Controllers
         }
 
         [HttpDelete("{id}", Name = "DeleteSource")]
-        public async Task<ActionResult<SourceDto>> DeleteSource(int id)
+        public async Task<IActionResult> DeleteSource(int id)
         {         
             _logger.Log(LogLevel.Debug, "Request to SourcesController, DeleteSource action");
 

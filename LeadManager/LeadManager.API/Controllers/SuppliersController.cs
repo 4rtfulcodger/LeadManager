@@ -31,13 +31,13 @@ namespace LeadManager.API.Controllers
 
 
         [HttpGet()]
-        public async Task<ActionResult<IEnumerable<SupplierDto>>> GetSuppliers()
+        public async Task<IActionResult> GetSuppliers()
         {
             return Ok(_mapper.Map<SupplierDto[]>(await _supplierService.GetSuppliersAsync()));
         }
 
         [HttpGet("{id}", Name = "GetSupplier")]
-        public async Task<ActionResult<IEnumerable<SupplierDto>>> GetSupplier(int id)
+        public async Task<IActionResult> GetSupplier(int id)
         {
             var supplier = await _supplierService.GetSupplierWithIdAsync(id);
 
@@ -48,7 +48,7 @@ namespace LeadManager.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<SupplierDto>> CreateSupplier(SupplierForCreateDto supplierDto)
+        public async Task<IActionResult> CreateSupplier(SupplierForCreateDto supplierDto)
         {
             var newSupplier = _mapper.Map<Supplier>(supplierDto);
             bool addLeadSuccess = await _supplierService.AddSupplierAsync(newSupplier);
@@ -58,7 +58,7 @@ namespace LeadManager.API.Controllers
         }
 
         [HttpPatch("{supplierId}")]
-        public async Task<ActionResult<LeadDto>> UpdateSupplier(JsonPatchDocument<SupplierForUpdateDto> patchDocument, int supplierId)
+        public async Task<IActionResult> UpdateSupplier(JsonPatchDocument<SupplierForUpdateDto> patchDocument, int supplierId)
         {
             var supplierEntity = await _supplierService.GetSupplierWithIdAsync(supplierId);
             if (supplierEntity == null)
@@ -82,7 +82,7 @@ namespace LeadManager.API.Controllers
         }
 
         [HttpDelete("{id}", Name = "DeleteSupplier")]
-        public async Task<ActionResult<SupplierDto>> DeleteSupplier(int id)
+        public async Task<IActionResult> DeleteSupplier(int id)
         {
             //Validation and filter logic should be removed from controllers
             //Temporarily adding these for testing

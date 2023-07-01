@@ -22,7 +22,7 @@ namespace LeadManager.API.Controllers
 
 
         [HttpGet("{fileId}")]
-        public ActionResult GetFile(string fileId)
+        public IActionResult GetFile(string fileId)
         {
             //The logic to lookup the file path needs to be written
             //This is just for demo porposes

@@ -44,7 +44,7 @@ namespace LeadManager.API.Controllers
 
 
         [HttpGet()]
-        public async Task<ActionResult<IEnumerable<LeadDto>>> GetLeads(LeadFilter leadFilter)
+        public async Task<IActionResult> GetLeads(LeadFilter leadFilter)
         {
             //Validation and filter logic should be removed from controllers
             //Temporarily adding these for testing
@@ -58,7 +58,7 @@ namespace LeadManager.API.Controllers
         }
 
         [HttpGet("{id}", Name = "GetLead")]
-        public async Task<ActionResult<LeadDto>> GetLead(int id)
+        public async Task<IActionResult> GetLead(int id)
         {
             //Validation and filter logic should be removed from controllers
             //Temporarily adding these for testing
@@ -74,7 +74,7 @@ namespace LeadManager.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<LeadDto>> CreateLead(LeadForCreateDto leadDto)
+        public async Task<IActionResult> CreateLead(LeadForCreateDto leadDto)
         {
             var supplier = await _supplierService.GetSupplierWithIdAsync(leadDto.SupplierId);
 
@@ -105,7 +105,7 @@ namespace LeadManager.API.Controllers
         }
 
         [HttpPatch("{leadId}")]
-        public async Task<ActionResult<LeadDto>> UpdateLead(JsonPatchDocument<LeadForUpdateDto> patchDocument, int leadId)
+        public async Task<IActionResult> UpdateLead(JsonPatchDocument<LeadForUpdateDto> patchDocument, int leadId)
         {
             var leadEntity = await _leadService.GetLeadWithIdAsync(leadId, false, false);
             if (leadEntity == null)
@@ -140,7 +140,7 @@ namespace LeadManager.API.Controllers
         }
 
         [HttpDelete("{id}", Name = "DeleteLead")]
-        public async Task<ActionResult<LeadDto>> DeleteLead(int id)
+        public async Task<IActionResult> DeleteLead(int id)
         {
             //Validation and filter logic should be removed from controllers
             //Temporarily adding these for testing
