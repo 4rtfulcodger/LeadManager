@@ -11,7 +11,8 @@ namespace LeadManager.Core.Interfaces
     {
         bool IsValidDeleteResult(object searchResult);
         bool IsValidCreateResult(object createdResult);
-        bool ValidateDeleteResult(object deleteResult);
         bool IsValidUpdateResult(object updateResult);
+        bool IsValidEntitySearchResult<T>(object lookupResult);
+
     }
 }

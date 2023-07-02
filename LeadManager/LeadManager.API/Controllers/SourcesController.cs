@@ -42,9 +42,9 @@ namespace LeadManager.API.Controllers
         [HttpGet("{id}", Name = "GetSource")]
         public async Task<IActionResult> GetSources(int id)
         {
-            var sourceToReturn = await _sourceService.GetSourceWithIdAsync(id);
-           if(sourceToReturn == null)
-                return NotFound(sourceToReturn);
+           var sourceToReturn = await _sourceService.GetSourceWithIdAsync(id);
+           if (!_apiEndpointValidation.IsValidEntitySearchResult<Source>(sourceToReturn))
+                return NotFound(sourceToReturn);                          
 
             return Ok(_mapper.Map<SourceDto>(sourceToReturn));
         }
@@ -64,7 +64,8 @@ namespace LeadManager.API.Controllers
         public async Task<IActionResult> UpdateSource(JsonPatchDocument<SourceForUpdateDto> patchDocument, int sourceId)
         {
             var sourceEntity = await _sourceService.GetSourceWithIdAsync(sourceId);
-            _apiEndpointValidation.IsValidDeleteResult(sourceEntity);
+            if(!_apiEndpointValidation.IsValidEntitySearchResult<Source>(sourceEntity))
+                return BadRequest();
 
             var sourceDto = _mapper.Map<SourceForUpdateDto>(sourceEntity);
             patchDocument.ApplyTo(sourceDto);                       

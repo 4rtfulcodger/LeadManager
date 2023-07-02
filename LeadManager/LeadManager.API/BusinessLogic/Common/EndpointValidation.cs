@@ -25,5 +25,10 @@ namespace LeadManager.API.BusinessLogic.Common
         {
             return (bool)updateResult == true ? true : false;
         }
+
+        public bool IsValidEntitySearchResult<T>(object lookupResult)
+        {
+            return lookupResult is T && lookupResult != null;
+        }
     }
 }
