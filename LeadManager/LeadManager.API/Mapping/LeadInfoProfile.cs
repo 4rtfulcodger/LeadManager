@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using LeadManager.Core.Entities;
-using LeadManager.Core.Entities.Lead;
 using LeadManager.Core.Entities.Source;
 using LeadManager.Core.Entities.Supplier;
+using LeadManager.Core.Models;
 using LeadManager.Core.ViewModels;
 
 namespace LeadManager.API.Profiles
@@ -27,6 +27,25 @@ namespace LeadManager.API.Profiles
             CreateMap<Supplier, SupplierForCreateDto>().ReverseMap();
             CreateMap<Supplier, SupplierForUpdateDto>().ReverseMap();
             #endregion
+
+            #region Contact
+
+            CreateMap<Contact, ContactForCreateDto>().ReverseMap();
+
+            #endregion
+
+            #region PhoneNumber
+
+            CreateMap<PhoneNumber, PhoneNumberForCreateDto>().ReverseMap();
+
+            #endregion
+
+            #region Address
+
+            CreateMap<Address, AddressForCreateDto>().ReverseMap();
+
+            #endregion
+
 
             #region Lead 
             CreateMap<Lead,LeadDto>().ForMember(l => l.Id, opt => opt.MapFrom(ld => ld.LeadId));

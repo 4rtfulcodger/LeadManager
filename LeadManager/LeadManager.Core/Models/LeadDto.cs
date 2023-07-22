@@ -1,4 +1,5 @@
 ﻿using LeadManager.Core.Entities;
+using LeadManager.Core.Models;
 
 namespace LeadManager.Core.ViewModels
 {
@@ -22,6 +23,8 @@ namespace LeadManager.Core.ViewModels
 
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
+
+        public List<ContactForCreateDto> Contacts { get; set; }
     }
 
     public class LeadForUpdateDto

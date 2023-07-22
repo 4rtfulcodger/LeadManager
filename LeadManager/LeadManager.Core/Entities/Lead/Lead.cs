@@ -5,10 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LeadManager.Core.Entities.Source;
-using LeadManager.Core.Entities.Supplier;
 
-namespace LeadManager.Core.Entities.Lead
+namespace LeadManager.Core.Entities
 {
     public class Lead
     {
@@ -32,6 +30,8 @@ namespace LeadManager.Core.Entities.Lead
 
         [MaxLength(200)]
         public string? Description { get; set; }
+
+        public List<Contact> Contacts { get; set; }
 
         public Lead(int sourceId, int supplierId, string name, string? description)
         {

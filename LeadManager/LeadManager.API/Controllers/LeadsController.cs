@@ -8,13 +8,13 @@ using LeadManager.Core.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using LeadManager.Core.ViewModels;
-using LeadManager.Core.Entities.Lead;
 using LeadManager.Core.Interfaces.Source;
 using LeadManager.Core.Interfaces.Supplier;
 using LeadManager.Infrastructure.Services;
 using System.Collections.Generic;
 using LeadManager.Core.Entities.Source;
 using LeadManager.Core.Entities.Supplier;
+using LeadManager.Core.Entities;
 
 namespace LeadManager.API.Controllers
 {

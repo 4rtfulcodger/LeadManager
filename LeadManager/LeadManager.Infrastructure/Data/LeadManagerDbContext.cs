@@ -1,5 +1,4 @@
 ﻿using LeadManager.Core.Entities;
-using LeadManager.Core.Entities.Lead;
 using LeadManager.Core.Entities.Source;
 using LeadManager.Core.Entities.Supplier;
 using Microsoft.AspNetCore.Identity;
@@ -19,7 +18,13 @@ namespace LeadManager.Infrastructure.Data
         public DbSet<Supplier> Suppliers { get; set; }
 
         public DbSet<Lead> Leads { get; set; }
-        
+
+        public DbSet<Contact> Contacts { get; set; }
+
+        public DbSet<PhoneNumber> PhoneNumber { get; set; }
+
+        public DbSet<Address> Address { get; set; }
+
 
         public LeadManagerDbContext(DbContextOptions<LeadManagerDbContext> options) : base(options)
         {         

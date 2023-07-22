@@ -7,11 +7,11 @@ namespace LeadManager.Core.Interfaces.Lead
         Task<bool> SaveChangesAsync();
 
         #region Lead
-        Task<bool> AddLeadAsync(Entities.Lead.Lead lead);
+        Task<bool> AddLeadAsync(Entities.Lead lead);
         Task<bool> UpdateLeadAsync(int Id);
-        Task<IEnumerable<Entities.Lead.Lead>> GetLeadsAsync(LeadFilter leadFilter);
-        Task<Entities.Lead.Lead?> GetLeadWithIdAsync(int Id, bool includeSource = false, bool includeSupplier = false);
-        Task<bool> DeleteLead(Entities.Lead.Lead lead);
+        Task<IEnumerable<Entities.Lead>> GetLeadsAsync(LeadFilter leadFilter);
+        Task<Entities.Lead?> GetLeadWithIdAsync(int Id, bool includeSource = false, bool includeSupplier = false);
+        Task<bool> DeleteLead(Entities.Lead lead);
         #endregion
     }
 }

@@ -1,4 +1,4 @@
-﻿using LeadManager.Core.Entities.Lead;
+﻿using LeadManager.Core.Entities;
 using LeadManager.Core.Helpers;
 using LeadManager.Core.Interfaces.Lead;
 using Microsoft.Extensions.Logging;
