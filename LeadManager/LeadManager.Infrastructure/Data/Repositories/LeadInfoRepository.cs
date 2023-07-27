@@ -42,6 +42,11 @@ namespace LeadManager.Infrastructure.Data.Repositories
             if (leadFilter.IncludeSupplier)
                 leads = leads.Include(l => l.Supplier);
 
+            if(leadFilter.IncludeContacts)
+                leads = leads.Include(l => l.Contacts)
+                             .ThenInclude(c => c.PhoneNumbers)
+                             .Include(c => c.Contacts)
+                             .ThenInclude(c => c.Addresses);           
 
             if (leadFilter.supplierIds.Count() > 0)
                 leads = leads.Where(l => leadFilter.supplierIds.Contains(l.SupplierId)); 

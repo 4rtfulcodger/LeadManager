@@ -24,7 +24,7 @@ namespace LeadManager.API.BusinessLogic.Common
         public IActionResult ReturnSearchResult<Ts, TOut>(object searchResult)
         {
             if (searchResult is Ts && searchResult != null)
-                return Ok(_mapper.Map<Ts>(searchResult));
+                return Ok(_mapper.Map<TOut>(searchResult));
 
             return NotFound();
         }

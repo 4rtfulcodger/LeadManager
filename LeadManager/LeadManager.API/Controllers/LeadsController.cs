@@ -53,7 +53,7 @@ namespace LeadManager.API.Controllers
         public async Task<IActionResult> GetLeads(LeadFilter leadFilter)
         {            
             var leads = await _leadService.GetLeadsAsync(leadFilter);
-            return _apiEndpointHandler.ReturnSearchResult<IEnumerable<Lead>,IEnumerable<LeadDto>>(leads);
+            return _apiEndpointHandler.ReturnSearchResult<IEnumerable<Lead>,IEnumerable<LeadDto>>(leads);        
         }
 
         [HttpGet("{id}", Name = "GetLead")]

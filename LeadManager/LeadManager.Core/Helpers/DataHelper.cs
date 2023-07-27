@@ -143,7 +143,7 @@ namespace LeadManager.Core.Helpers
 
         public bool IncludeSupplier { get; set; }
 
-        public bool IncludePeople { get; set; }
+        public bool IncludeContacts { get; set; }
         public bool IncludeAttributes { get; set; }
 
         public bool IncludeTrackingSummary { get; set; }
