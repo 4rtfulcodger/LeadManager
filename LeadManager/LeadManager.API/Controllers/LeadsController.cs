@@ -61,7 +61,7 @@ namespace LeadManager.API.Controllers
         {
             _logger.Log(LogLevel.Debug, "GET Request to LeadsController, GetLead action");
                         
-            var leadToReturn = await _leadService.GetLeadWithIdAsync(id, true, true);
+            var leadToReturn = await _leadService.GetLeadWithIdAsync(id, true, true, true);
             return _apiEndpointHandler.ReturnSearchResult<Lead,LeadDto>(leadToReturn);
         }
 

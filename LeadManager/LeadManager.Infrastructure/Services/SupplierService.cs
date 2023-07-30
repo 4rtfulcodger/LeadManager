@@ -1,6 +1,7 @@
 ﻿using LeadManager.Core.Entities.Source;
 using LeadManager.Core.Entities.Supplier;
 using LeadManager.Core.Interfaces.Supplier;
+using LeadManager.Core.ViewModels;
 using LeadManager.Infrastructure.Data.Repositories;
 using Microsoft.Extensions.Logging;
 using System;
@@ -25,6 +26,7 @@ namespace LeadManager.Infrastructure.Services
 
         public async Task<bool> AddSupplierAsync(Supplier supplier)
         {
+            supplier.SupplierRef = Guid.NewGuid();
             return await _supplierRepository.AddSupplierAsync(supplier);
         }
 

@@ -35,9 +35,15 @@ namespace LeadManager.Infrastructure.Services
             return await _sourceRepository.GetLeadsAsync(leadFilter);
         }
 
-        public async Task<Lead?> GetLeadWithIdAsync(int Id, bool includeSource = false, bool includeSupplier = false)
+        public async Task<Lead?> GetLeadWithIdAsync(int Id,
+            bool includeSource = false,
+            bool includeSupplier = false,
+            bool includeContacts = false)
         {
-            return await _sourceRepository.GetLeadWithIdAsync(Id,includeSource, includeSupplier);
+            return await _sourceRepository.GetLeadWithIdAsync(Id,
+                includeSource,
+                includeSupplier,
+                includeContacts);
         }
 
         public async Task<bool> UpdateLeadAsync(int Id)

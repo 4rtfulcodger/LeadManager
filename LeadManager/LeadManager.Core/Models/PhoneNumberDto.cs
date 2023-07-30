@@ -7,6 +7,12 @@ using static LeadManager.Core.Enums.EntityConstants;
 
 namespace LeadManager.Core.Models
 {
+    public class PhoneNumberDto
+    {
+        public PhoneNumberType PhoneType { get; set; }
+        public string Number { get; set; }
+    }
+
     public class PhoneNumberForCreateDto
     {
         public PhoneNumberType PhoneType { get; set; }

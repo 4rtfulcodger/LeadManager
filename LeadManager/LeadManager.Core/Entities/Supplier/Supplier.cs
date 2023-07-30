@@ -14,6 +14,8 @@ namespace LeadManager.Core.Entities.Supplier
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int SupplierId { get; set; }
 
+        public Guid SupplierRef { get; set; }
+
         [Required]
         [MaxLength(50)]
         public string Name { get; set; } = string.Empty;

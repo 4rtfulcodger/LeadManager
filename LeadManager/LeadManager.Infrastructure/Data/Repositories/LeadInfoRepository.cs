@@ -55,7 +55,10 @@ namespace LeadManager.Infrastructure.Data.Repositories
             return await leads.ToListAsync();
         }
 
-        public async Task<Lead?> GetLeadWithIdAsync(int Id, bool includeSource = false, bool includeSupplier = false)
+        public async Task<Lead?> GetLeadWithIdAsync(int Id, 
+            bool includeSource = false,
+            bool includeSupplier = false,
+            bool includeContacts = false)
         {
             IQueryable<Lead> leads = _dbContext.Leads; 
 
@@ -64,6 +67,12 @@ namespace LeadManager.Infrastructure.Data.Repositories
 
             if (includeSupplier)
                 leads = leads.Include(l => l.Supplier);
+
+            if (includeContacts)
+                leads = leads.Include(l => l.Contacts)
+                             .ThenInclude(c => c.PhoneNumbers)
+                             .Include(c => c.Contacts)
+                             .ThenInclude(c => c.Addresses);
 
             return await leads.Where(l => l.LeadId == Id).FirstOrDefaultAsync();
         }

@@ -11,6 +11,8 @@ namespace LeadManager.Core.ViewModels
 
         public SupplierDto? Supplier { get; set; }
 
+        public List<ContactDto>? Contacts { get; set; }
+
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
     }

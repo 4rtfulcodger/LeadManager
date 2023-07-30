@@ -17,31 +17,34 @@ namespace LeadManager.API.Profiles
             #endregion
 
             #region Source
-            CreateMap<Source, SourceDto>().ForMember(s => s.Id, opt => opt.MapFrom(sd => sd.SourceId)).ReverseMap();
+            CreateMap<Source, SourceDto>();
             CreateMap<Source, SourceForCreateDto>().ReverseMap();
             CreateMap<Source, SourceForUpdateDto>().ReverseMap();
             #endregion
 
             #region Supplier
-            CreateMap<Supplier, SupplierDto>().ForMember(s => s.Id, opt => opt.MapFrom(sd => sd.SupplierId)).ReverseMap();
+            CreateMap<Supplier, SupplierDto>();
             CreateMap<Supplier, SupplierForCreateDto>().ReverseMap();
             CreateMap<Supplier, SupplierForUpdateDto>().ReverseMap();
             #endregion
 
             #region Contact
 
+            CreateMap<Contact, ContactDto>();
             CreateMap<Contact, ContactForCreateDto>().ReverseMap();
 
             #endregion
 
             #region PhoneNumber
 
+            CreateMap<PhoneNumber, PhoneNumberDto>();
             CreateMap<PhoneNumber, PhoneNumberForCreateDto>().ReverseMap();
 
             #endregion
 
             #region Address
 
+            CreateMap<Address, AddressDto>();
             CreateMap<Address, AddressForCreateDto>().ReverseMap();
 
             #endregion
