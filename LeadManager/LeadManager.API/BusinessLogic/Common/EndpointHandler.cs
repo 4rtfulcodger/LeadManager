@@ -51,7 +51,7 @@ namespace LeadManager.API.BusinessLogic.Common
                                                 object newSource)
         {
             if (createdResult)
-               return CreatedAtRoute("GetSource", new { id = Id }, _mapper.Map<TOut>(newSource));
+               return CreatedAtRoute(route, new { id = Id }, _mapper.Map<TOut>(newSource));
 
             return BadRequest();
         }

@@ -9,12 +9,12 @@ namespace LeadManager.Infrastructure.Services
     public class LeadService : ILeadService
     {
         private readonly ILogger<LeadService> _logger;
-        public ILeadInfoRepository _sourceRepository;
+        public ILeadInfoRepository _leadRepository;
 
         public LeadService(ILeadInfoRepository sourceRepository,
             ILogger<LeadService> logger)
         {
-            _sourceRepository = sourceRepository ?? throw new ArgumentException(nameof(sourceRepository));
+            _leadRepository = sourceRepository ?? throw new ArgumentException(nameof(sourceRepository));
             _logger = logger ?? throw new ArgumentException(nameof(logger));
         }
 
@@ -22,17 +22,30 @@ namespace LeadManager.Infrastructure.Services
         {
             lead.LeadRef = LeadHelper.GenerateLeadReference();
 
-            return await _sourceRepository.AddLeadAsync(lead);
+            return await _leadRepository.CreateLeadAsync(lead);
+        }
+
+        public async Task<bool> CreateLeadTypeAsync(LeadType leadType)
+        {
+            leadType.LeadTypeReference = Guid.NewGuid();
+            leadType.CreatedOn = DateTime.Now;
+
+            return await _leadRepository.CreateLeadTypeAsync(leadType);
         }
 
         public async Task<bool> DeleteLead(Lead lead)
         {
-            return await _sourceRepository.DeleteLead(lead);
+            return await _leadRepository.DeleteLead(lead);
         }
 
         public async Task<IEnumerable<Lead>> GetLeadsAsync(LeadFilter leadFilter)
         {
-            return await _sourceRepository.GetLeadsAsync(leadFilter);
+            return await _leadRepository.GetLeadsAsync(leadFilter);
+        }
+
+        public async Task<LeadType?> GetLeadTypeAsync(int leadTypeId)
+        {
+            return await _leadRepository.GetLeadTypeAsync(leadTypeId);
         }
 
         public async Task<Lead?> GetLeadWithIdAsync(int Id,
@@ -40,7 +53,7 @@ namespace LeadManager.Infrastructure.Services
             bool includeSupplier = false,
             bool includeContacts = false)
         {
-            return await _sourceRepository.GetLeadWithIdAsync(Id,
+            return await _leadRepository.GetLeadWithIdAsync(Id,
                 includeSource,
                 includeSupplier,
                 includeContacts);
@@ -48,7 +61,7 @@ namespace LeadManager.Infrastructure.Services
 
         public async Task<bool> UpdateLeadAsync(int Id)
         {
-            return await _sourceRepository.UpdateLeadAsync(Id);
+            return await _leadRepository.UpdateLeadAsync(Id);
         }
     }
 }

@@ -21,7 +21,13 @@ namespace LeadManager.Infrastructure.Data.Repositories
 
         #region Leads
 
-        public async Task<bool> AddLeadAsync(Lead lead)
+        public async Task<bool> CreateLeadTypeAsync(LeadType leadType)
+        {
+            _dbContext.Add(leadType);
+            return (await _dbContext.SaveChangesAsync() >= 0);
+        }
+
+        public async Task<bool> CreateLeadAsync(Lead lead)
         {
             _dbContext.Add(lead);
             return (await _dbContext.SaveChangesAsync() >= 0);
@@ -30,6 +36,12 @@ namespace LeadManager.Infrastructure.Data.Repositories
         public async Task<bool> UpdateLeadAsync(int leadId)
         {
             return (await _dbContext.SaveChangesAsync() >= 0);
+        }
+
+        public async Task<LeadType?> GetLeadTypeAsync(int leadTypeId)
+        {
+            IQueryable<LeadType> leadTypes = _dbContext.LeadType;
+            return await leadTypes.Where(l => l.LeadTypeId == leadTypeId).FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Lead>> GetLeadsAsync(LeadFilter leadFilter)

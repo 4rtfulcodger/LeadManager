@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LeadManager.Infrastructure.Migrations
 {
     [DbContext(typeof(LeadManagerDbContext))]
-    [Migration("20230721173824_AddContactAndLeadRelationshipv1.1")]
-    partial class AddContactAndLeadRelationshipv11
+    [Migration("20230805131343_initial_migration")]
+    partial class initialmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,6 +47,9 @@ namespace LeadManager.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("AddeddDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("AddressLine1")
                         .IsRequired()
@@ -94,7 +97,7 @@ namespace LeadManager.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateOfBirth")
+                    b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FirstName")
@@ -140,6 +143,9 @@ namespace LeadManager.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("LeadTypeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -158,6 +164,95 @@ namespace LeadManager.Infrastructure.Migrations
                     b.HasIndex("SupplierId");
 
                     b.ToTable("Leads");
+                });
+
+            modelBuilder.Entity("LeadManager.Core.Entities.LeadAttribute", b =>
+                {
+                    b.Property<int>("LeadAttributeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LeadAttributeId"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("LeadTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("LeadAttributeId");
+
+                    b.HasIndex("LeadTypeId");
+
+                    b.ToTable("LeadAttribute");
+                });
+
+            modelBuilder.Entity("LeadManager.Core.Entities.LeadAttributeValue", b =>
+                {
+                    b.Property<int>("LeadAttributeValueId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LeadAttributeValueId"));
+
+                    b.Property<string>("AttributeValue")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("LeadAttributeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LeadId")
+                        .HasColumnType("int");
+
+                    b.HasKey("LeadAttributeValueId");
+
+                    b.HasIndex("LeadAttributeId");
+
+                    b.HasIndex("LeadId");
+
+                    b.ToTable("LeadAttributeValue");
+                });
+
+            modelBuilder.Entity("LeadManager.Core.Entities.LeadType", b =>
+                {
+                    b.Property<int>("LeadTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LeadTypeId"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("LeadTypeReference")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("LeadTypeId");
+
+                    b.ToTable("LeadType");
                 });
 
             modelBuilder.Entity("LeadManager.Core.Entities.PhoneNumber", b =>
@@ -229,6 +324,9 @@ namespace LeadManager.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<Guid>("SupplierRef")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("SupplierId");
 
@@ -485,6 +583,32 @@ namespace LeadManager.Infrastructure.Migrations
                     b.Navigation("Supplier");
                 });
 
+            modelBuilder.Entity("LeadManager.Core.Entities.LeadAttribute", b =>
+                {
+                    b.HasOne("LeadManager.Core.Entities.LeadType", "LeadType")
+                        .WithMany("LeadAttributes")
+                        .HasForeignKey("LeadTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LeadType");
+                });
+
+            modelBuilder.Entity("LeadManager.Core.Entities.LeadAttributeValue", b =>
+                {
+                    b.HasOne("LeadManager.Core.Entities.LeadAttribute", "Attribute")
+                        .WithMany()
+                        .HasForeignKey("LeadAttributeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LeadManager.Core.Entities.Lead", null)
+                        .WithMany("LeadAttributeValues")
+                        .HasForeignKey("LeadId");
+
+                    b.Navigation("Attribute");
+                });
+
             modelBuilder.Entity("LeadManager.Core.Entities.PhoneNumber", b =>
                 {
                     b.HasOne("LeadManager.Core.Entities.Contact", null)
@@ -548,6 +672,16 @@ namespace LeadManager.Infrastructure.Migrations
                     b.Navigation("Addresses");
 
                     b.Navigation("PhoneNumbers");
+                });
+
+            modelBuilder.Entity("LeadManager.Core.Entities.Lead", b =>
+                {
+                    b.Navigation("LeadAttributeValues");
+                });
+
+            modelBuilder.Entity("LeadManager.Core.Entities.LeadType", b =>
+                {
+                    b.Navigation("LeadAttributes");
                 });
 #pragma warning restore 612, 618
         }

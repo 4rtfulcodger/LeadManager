@@ -16,6 +16,9 @@ namespace LeadManager.Core.Entities
 
         public string LeadRef { get; set; }
 
+        [ForeignKey("LeadTypeId")]
+        public int LeadTypeId { get; set; }
+
         [ForeignKey("SourceId")]
         public Source.Source Source { get; set; }
         public int SourceId { get; set; }
@@ -32,6 +35,8 @@ namespace LeadManager.Core.Entities
         public string? Description { get; set; }
 
         public List<Contact> Contacts { get; set; }
+
+        public List<LeadAttributeValue>? LeadAttributeValues { get; set; } = null;
 
         public Lead(int sourceId, int supplierId, string name, string? description)
         {

@@ -59,15 +59,39 @@ namespace LeadManager.API.Controllers
         [HttpGet("{id}", Name = "GetLead")]
         public async Task<IActionResult> GetLead(int id)
         {
-            _logger.Log(LogLevel.Debug, "GET Request to LeadsController, GetLead action");
+            _logger.Log(LogLevel.Debug, "GET request to LeadsController, GetLead action");
                         
             var leadToReturn = await _leadService.GetLeadWithIdAsync(id, true, true, true);
             return _apiEndpointHandler.ReturnSearchResult<Lead,LeadDto>(leadToReturn);
         }
 
+        [HttpGet("leadtypes/{id}",Name = "GetLeadType")]
+        public async Task<IActionResult> GetLeadType(int id)
+        {
+            _logger.Log(LogLevel.Debug, "GET request to LeadsController, GetLeadType action");
+
+            var leadTypeToReturn = await _leadService.GetLeadTypeAsync(id);
+            return _apiEndpointHandler.ReturnSearchResult<LeadType, LeadTypeDto>(leadTypeToReturn);
+        }
+
+        [HttpPost]
+        [Route("leadtypes")]
+        public async Task<IActionResult> CreateLeadType(LeadTypeForCreateDto leadTypeForCreateDto)
+        {
+            var newLeadType = _mapper.Map<LeadType>(leadTypeForCreateDto);
+            return _apiEndpointHandler.ReturnCreateResult<LeadTypeForCreateDto>(await _leadService.CreateLeadTypeAsync(newLeadType),
+                "GetLeadType",
+                newLeadType.LeadTypeId.ToString(),
+                newLeadType);            
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateLead(LeadForCreateDto leadDto)
         {
+            var leadType = await _leadService.GetLeadTypeAsync(leadDto.LeadTypeId);
+            if (!_apiEndpointHandler.IsValidEntitySearchResult<LeadType>(leadType))
+                return BadRequest();
+
             var supplier = await _supplierService.GetSupplierWithIdAsync(leadDto.SupplierId);
             if(!_apiEndpointHandler.IsValidEntitySearchResult<Supplier>(supplier))
                 return BadRequest();

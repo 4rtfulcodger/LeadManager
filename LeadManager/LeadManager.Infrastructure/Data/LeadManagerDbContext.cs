@@ -19,6 +19,12 @@ namespace LeadManager.Infrastructure.Data
 
         public DbSet<Lead> Leads { get; set; }
 
+        public DbSet<LeadType> LeadType { get; set; }
+
+        public DbSet<LeadAttribute> LeadAttribute { get; set; }
+
+        public DbSet<LeadAttributeValue> LeadAttributeValue { get; set; }
+
         public DbSet<Contact> Contacts { get; set; }
 
         public DbSet<PhoneNumber> PhoneNumber { get; set; }
