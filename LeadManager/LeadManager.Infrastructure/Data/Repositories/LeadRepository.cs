@@ -10,22 +10,14 @@ using System.Threading.Tasks;
 
 namespace LeadManager.Infrastructure.Data.Repositories
 {
-    public class LeadInfoRepository : ILeadInfoRepository
+    public class LeadRepository : ILeadRepository
     {
         private readonly LeadManagerDbContext _dbContext;
 
-        public LeadInfoRepository(LeadManagerDbContext context)
+        public LeadRepository(LeadManagerDbContext context)
         {
             _dbContext = context ?? throw new ArgumentNullException(nameof(context));
-        }
-
-        #region Leads
-
-        public async Task<bool> CreateLeadTypeAsync(LeadType leadType)
-        {
-            _dbContext.Add(leadType);
-            return (await _dbContext.SaveChangesAsync() >= 0);
-        }
+        }        
 
         public async Task<bool> CreateLeadAsync(Lead lead)
         {
@@ -36,12 +28,6 @@ namespace LeadManager.Infrastructure.Data.Repositories
         public async Task<bool> UpdateLeadAsync(int leadId)
         {
             return (await _dbContext.SaveChangesAsync() >= 0);
-        }
-
-        public async Task<LeadType?> GetLeadTypeAsync(int leadTypeId)
-        {
-            IQueryable<LeadType> leadTypes = _dbContext.LeadType;
-            return await leadTypes.Where(l => l.LeadTypeId == leadTypeId).FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Lead>> GetLeadsAsync(LeadFilter leadFilter)
@@ -93,14 +79,11 @@ namespace LeadManager.Infrastructure.Data.Repositories
         {
            _dbContext.Remove(lead);
             return (await _dbContext.SaveChangesAsync() >= 0);
-        }
-
-        #endregion
-              
+        }    
 
         public async Task<bool> SaveChangesAsync()
         {
             return (await _dbContext.SaveChangesAsync() >= 0);
-        }        
+        }
     }
 }

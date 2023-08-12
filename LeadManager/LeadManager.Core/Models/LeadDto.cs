@@ -53,6 +53,13 @@ namespace LeadManager.Core.ViewModels
         public List<ContactForCreateDto> Contacts { get; set; }
     }
 
+    public class LeadTypeForUpdateDto
+    {
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+    }
+
     public class LeadForUpdateDto
     {
         public int SourceId { get; set; }

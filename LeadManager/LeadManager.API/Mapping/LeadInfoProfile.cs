@@ -52,8 +52,7 @@ namespace LeadManager.API.Profiles
 
             #region Lead 
 
-            CreateMap<LeadType, LeadTypeDto>().ReverseMap();
-            CreateMap<LeadType, LeadTypeForCreateDto>().ReverseMap();            
+            CreateMap<LeadType, LeadTypeDto>().ReverseMap();            
 
             CreateMap<Lead,LeadDto>().ForMember(l => l.Id, opt => opt.MapFrom(ld => ld.LeadId));
             CreateMap<Lead,LeadForCreateDto>()
@@ -67,6 +66,13 @@ namespace LeadManager.API.Profiles
                 .ReverseMap()
                 .ForMember(l => l.SupplierId, opt => opt.MapFrom(lfud => lfud.SupplierId))
                 .ReverseMap();
+            #endregion
+
+            #region LeadType
+
+            CreateMap<LeadType, LeadTypeForCreateDto>().ReverseMap();
+            CreateMap<LeadType, LeadTypeForUpdateDto>().ReverseMap();
+
             #endregion
         }
     }

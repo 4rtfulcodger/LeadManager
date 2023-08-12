@@ -1,6 +1,7 @@
 ﻿using LeadManager.Core.Entities;
 using LeadManager.Core.Helpers;
 using LeadManager.Core.Interfaces.Lead;
+using LeadManager.Infrastructure.Data.Repositories;
 using Microsoft.Extensions.Logging;
 
 
@@ -9,20 +10,16 @@ namespace LeadManager.Infrastructure.Services
     public class LeadService : ILeadService
     {
         private readonly ILogger<LeadService> _logger;
-        public ILeadInfoRepository _leadRepository;
+        public ILeadRepository _leadRepository;
+        public ILeadTypeRepository _leadTypeRepository;
 
-        public LeadService(ILeadInfoRepository sourceRepository,
+        public LeadService(ILeadRepository sourceRepository,
+            ILeadTypeRepository leadTypeRepository,
             ILogger<LeadService> logger)
         {
             _leadRepository = sourceRepository ?? throw new ArgumentException(nameof(sourceRepository));
+            _leadTypeRepository = leadTypeRepository ?? throw new ArgumentException(nameof(leadTypeRepository));
             _logger = logger ?? throw new ArgumentException(nameof(logger));
-        }
-
-        public async Task<bool> AddLeadAsync(Lead lead)
-        {
-            lead.LeadRef = LeadHelper.GenerateLeadReference();
-
-            return await _leadRepository.CreateLeadAsync(lead);
         }
 
         public async Task<bool> CreateLeadTypeAsync(LeadType leadType)
@@ -30,7 +27,19 @@ namespace LeadManager.Infrastructure.Services
             leadType.LeadTypeReference = Guid.NewGuid();
             leadType.CreatedOn = DateTime.Now;
 
-            return await _leadRepository.CreateLeadTypeAsync(leadType);
+            return await _leadTypeRepository.CreateLeadTypeAsync(leadType);
+        }
+
+        public async Task<bool> CreateLeadAsync(Lead lead)
+        {
+            lead.LeadRef = LeadHelper.GenerateLeadReference();
+
+            return await _leadRepository.CreateLeadAsync(lead);
+        }        
+
+        public async Task<bool> DeleteLeadType(LeadType leadType)
+        {
+            return await _leadTypeRepository.DeleteLeadType(leadType);
         }
 
         public async Task<bool> DeleteLead(Lead lead)
@@ -45,7 +54,7 @@ namespace LeadManager.Infrastructure.Services
 
         public async Task<LeadType?> GetLeadTypeAsync(int leadTypeId)
         {
-            return await _leadRepository.GetLeadTypeAsync(leadTypeId);
+            return await _leadTypeRepository.GetLeadTypeAsync(leadTypeId);
         }
 
         public async Task<Lead?> GetLeadWithIdAsync(int Id,
@@ -62,6 +71,11 @@ namespace LeadManager.Infrastructure.Services
         public async Task<bool> UpdateLeadAsync(int Id)
         {
             return await _leadRepository.UpdateLeadAsync(Id);
+        }
+
+        public async Task<bool> UpdateLeadTypeAsync(int Id)
+        {
+            return await _leadTypeRepository.UpdateLeadTypeAsync(Id);
         }
     }
 }

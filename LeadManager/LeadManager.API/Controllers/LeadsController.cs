@@ -3,15 +3,12 @@ using LeadManager.Core.Interfaces;
 using LeadManager.Core.Interfaces.Lead;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 using LeadManager.Core.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using LeadManager.Core.ViewModels;
 using LeadManager.Core.Interfaces.Source;
 using LeadManager.Core.Interfaces.Supplier;
-using LeadManager.Infrastructure.Services;
-using System.Collections.Generic;
 using LeadManager.Core.Entities.Source;
 using LeadManager.Core.Entities.Supplier;
 using LeadManager.Core.Entities;
@@ -63,27 +60,7 @@ namespace LeadManager.API.Controllers
                         
             var leadToReturn = await _leadService.GetLeadWithIdAsync(id, true, true, true);
             return _apiEndpointHandler.ReturnSearchResult<Lead,LeadDto>(leadToReturn);
-        }
-
-        [HttpGet("leadtypes/{id}",Name = "GetLeadType")]
-        public async Task<IActionResult> GetLeadType(int id)
-        {
-            _logger.Log(LogLevel.Debug, "GET request to LeadsController, GetLeadType action");
-
-            var leadTypeToReturn = await _leadService.GetLeadTypeAsync(id);
-            return _apiEndpointHandler.ReturnSearchResult<LeadType, LeadTypeDto>(leadTypeToReturn);
-        }
-
-        [HttpPost]
-        [Route("leadtypes")]
-        public async Task<IActionResult> CreateLeadType(LeadTypeForCreateDto leadTypeForCreateDto)
-        {
-            var newLeadType = _mapper.Map<LeadType>(leadTypeForCreateDto);
-            return _apiEndpointHandler.ReturnCreateResult<LeadTypeForCreateDto>(await _leadService.CreateLeadTypeAsync(newLeadType),
-                "GetLeadType",
-                newLeadType.LeadTypeId.ToString(),
-                newLeadType);            
-        }
+        }        
 
         [HttpPost]
         public async Task<IActionResult> CreateLead(LeadForCreateDto leadDto)
@@ -102,7 +79,7 @@ namespace LeadManager.API.Controllers
 
             var newLead = _mapper.Map<Lead>(leadDto);
 
-            return _apiEndpointHandler.ReturnCreateResult<LeadForCreateDto>(await _leadService.AddLeadAsync(newLead),
+            return _apiEndpointHandler.ReturnCreateResult<LeadForCreateDto>(await _leadService.CreateLeadAsync(newLead),
                 "GetLead",
                 newLead.LeadId.ToString(),
                 newLead);
