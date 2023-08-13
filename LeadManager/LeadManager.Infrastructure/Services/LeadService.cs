@@ -12,13 +12,16 @@ namespace LeadManager.Infrastructure.Services
         private readonly ILogger<LeadService> _logger;
         public ILeadRepository _leadRepository;
         public ILeadTypeRepository _leadTypeRepository;
+        public ILeadAttributeRepository _leadAttributeRepository;
 
         public LeadService(ILeadRepository sourceRepository,
             ILeadTypeRepository leadTypeRepository,
+            ILeadAttributeRepository leadAttributeRepository,
             ILogger<LeadService> logger)
         {
             _leadRepository = sourceRepository ?? throw new ArgumentException(nameof(sourceRepository));
             _leadTypeRepository = leadTypeRepository ?? throw new ArgumentException(nameof(leadTypeRepository));
+            _leadAttributeRepository = leadAttributeRepository ?? throw new ArgumentException(nameof(leadAttributeRepository));
             _logger = logger ?? throw new ArgumentException(nameof(logger));
         }
 
@@ -76,6 +79,31 @@ namespace LeadManager.Infrastructure.Services
         public async Task<bool> UpdateLeadTypeAsync(int Id)
         {
             return await _leadTypeRepository.UpdateLeadTypeAsync(Id);
+        }
+
+        public async Task<bool> CreateLeadAttributeAsync(LeadAttribute leadAttribute)
+        {
+            return await _leadAttributeRepository.CreateLeadAttributeAsync(leadAttribute);
+        }
+
+        public async Task<bool> UpdateLeadAttributeAsync(int Id)
+        {
+            return await _leadAttributeRepository.UpdateLeadAttributeAsync(Id);
+        }
+
+        public async Task<LeadAttribute?> GetLeadAttributeAsync(int leadAttributeId)
+        {
+            return await _leadAttributeRepository.GetLeadAttributeAsync(leadAttributeId);
+        }
+
+        public async Task<IEnumerable<LeadAttribute>?> GetLeadAttributesAsync(int leadTypeId)
+        {
+            return await _leadAttributeRepository.GetLeadAttributesAsync(leadTypeId);
+        }
+
+        public async Task<bool> DeleteLeadAttribute(LeadAttribute leadAttribute)
+        {
+            return await _leadAttributeRepository.DeleteLeadAttribute(leadAttribute);
         }
     }
 }

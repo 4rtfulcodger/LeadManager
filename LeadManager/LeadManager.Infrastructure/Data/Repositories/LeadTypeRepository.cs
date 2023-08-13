@@ -9,9 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace LeadManager.Infrastructure.Data.Repositories
-{
-    
-
+{   
     public class LeadTypeRepository : ILeadTypeRepository
     {
         private readonly LeadManagerDbContext _dbContext;
@@ -41,11 +39,6 @@ namespace LeadManager.Infrastructure.Data.Repositories
         public async Task<bool> DeleteLeadType(LeadType leadType)
         {
             _dbContext.Remove(leadType);
-            return (await _dbContext.SaveChangesAsync() >= 0);
-        }
-
-        public async Task<bool> SaveChangesAsync()
-        {
             return (await _dbContext.SaveChangesAsync() >= 0);
         }
     }

@@ -18,6 +18,20 @@ namespace LeadManager.Core.ViewModels
         public string? Description { get; set; }
     }
 
+    public class LeadAttributeDto
+    {
+        public int LeadAttributeId { get; set; }
+
+        public int LeadTypeId { get; set; }
+
+        public DateTime CreatedOn { get; set; }
+
+        public DateTime ModifiedOn { get; set; }
+
+        public string Name { get; set; }
+        public string? Description { get; set; }
+    }
+
     public class LeadDto
     {
         public int Id { get; set; }
@@ -39,6 +53,15 @@ namespace LeadManager.Core.ViewModels
         public string Description { get; set; }
     }
 
+    public class LeadAttributeForCreateDto
+    {
+        public int LeadTypeId { get; set; }
+
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+    }
+
     public class LeadForCreateDto
     {
         public int LeadTypeId { get; set; }
@@ -54,6 +77,13 @@ namespace LeadManager.Core.ViewModels
     }
 
     public class LeadTypeForUpdateDto
+    {
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+    }
+
+    public class LeadAttributeForUpdateDto
     {
         public string Name { get; set; }
 

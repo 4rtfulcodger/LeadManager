@@ -17,7 +17,10 @@ namespace LeadManager.Core.Entities
         public DateTime CreatedOn { get; set; }
 
         public DateTime ModifiedOn { get; set; }
+                
+        public int LeadTypeId { get; set; }
 
+        [ForeignKey("LeadTypeId")]
         public LeadType LeadType { get; set; }
 
         public string Name { get; set; }

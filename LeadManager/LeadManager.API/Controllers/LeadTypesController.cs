@@ -22,12 +22,12 @@ namespace LeadManager.API.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class LeadTypesController : ControllerBase
     {
-        private readonly ILogger<FilesController> _logger;
+        private readonly ILogger<LeadTypesController> _logger;
         private readonly IMapper _mapper;
         public ILeadService _leadService;
         private readonly IApiEndpointHandler _apiEndpointHandler;
 
-        public LeadTypesController(ILogger<FilesController> logger,
+        public LeadTypesController(ILogger<LeadTypesController> logger,
             ILeadService leadService,
             IMapper mapper,
             IApiEndpointHandler apiEndpointHandler)

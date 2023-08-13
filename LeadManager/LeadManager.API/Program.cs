@@ -86,6 +86,7 @@ builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<IApiEndpointHandler, EndpointHandler>();
 builder.Services.AddScoped<ILeadRepository, LeadRepository>();
 builder.Services.AddScoped<ILeadTypeRepository, LeadTypeRepository>();
+builder.Services.AddScoped<ILeadAttributeRepository, LeadAttributeRepository>();
 builder.Services.AddDbContext<LeadManagerDbContext>(options => options.UseSqlServer(builder.Configuration["ConnectionStrings:LeadManagerDb"]));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

@@ -74,6 +74,14 @@ namespace LeadManager.API.Profiles
             CreateMap<LeadType, LeadTypeForUpdateDto>().ReverseMap();
 
             #endregion
+
+            #region LeadAttribute
+
+            CreateMap<LeadAttribute, LeadAttributeDto>().ReverseMap();
+            CreateMap<LeadAttribute, LeadAttributeForCreateDto>().ReverseMap();
+            CreateMap<LeadAttribute, LeadAttributeForUpdateDto>().ReverseMap();
+
+            #endregion
         }
     }
 }
