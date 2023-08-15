@@ -40,6 +40,19 @@ namespace LeadManager.API.Controllers
             return _apiEndpointHandler.ReturnSearchResult<LeadAttribute, LeadAttributeDto>(leadAttributeToReturn);
         }
 
+        [HttpGet("leadtype/{leadTypeId}", Name = "GetLeadAttributes")]
+        public async Task<IActionResult> GetLeadAttributes(int leadTypeId)
+        {
+            _logger.Log(LogLevel.Debug, "GET request to LeadAttributesController, GetLeadAttributes action");
+
+            var leadTypeEntity = await _leadService.GetLeadTypeAsync(leadTypeId);
+            if (!_apiEndpointHandler.IsValidEntitySearchResult<LeadType>(leadTypeEntity))
+                return BadRequest();
+
+            var leadAttributesToReturn = await _leadService.GetLeadAttributesAsync(leadTypeId);
+            return _apiEndpointHandler.ReturnSearchResult<IEnumerable<LeadAttribute>,List<LeadAttributeDto>>(leadAttributesToReturn);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateLeadAttribute(LeadAttributeForCreateDto leadAttributeForCreateDto)
         {
