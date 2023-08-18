@@ -1,4 +1,5 @@
 using LeadManager.API.BusinessLogic.Common;
+using LeadManager.API.Configuration;
 using LeadManager.Core.Entities;
 using LeadManager.Core.Interfaces;
 using LeadManager.Core.Interfaces.Lead;
@@ -15,11 +16,9 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
 
-Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Debug()
-    .WriteTo.Console()
-    .WriteTo.File("Logs/log.txt")
-    .CreateLogger();
+
+
+StartupConfiguration.ConfigureLogger();
 
 var builder = WebApplication.CreateBuilder(args);
 //builder.Logging.ClearProviders();
@@ -30,65 +29,16 @@ builder.Host.UseSerilog();
 //You could also do this using Services.AddMvc/Services.AddMvcCore/Services.AddControllersWithViews,
 //However these will add additional services that are not required for an API such as Razor view support 
 
-builder.Services.AddIdentity<User, IdentityRole>(cfg =>
-{
-    cfg.User.RequireUniqueEmail = true;
-})
-.AddEntityFrameworkStores<LeadManagerDbContext>();
+StartupConfiguration.ConfigureIdentityAndAuthentication(builder);
 
-builder.Services.AddScoped<PasswordValidator<User>>();
-
-builder.Services.AddTransient<DbSeeder>();
-
-builder.Services.AddAuthentication()
-    .AddJwtBearer(cfg =>
-    {
-        cfg.TokenValidationParameters = new TokenValidationParameters()
-        {
-            ValidIssuer = builder.Configuration["Tokens:Issuer"],
-            ValidAudience = builder.Configuration["Tokens:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Tokens:Key"]))
-        };
-    }
-    );
-
-builder.Services.AddControllers(options =>
-{
-    //If Accept header value in the request is not supported, give back a 406 response saying it is not supported
-    options.ReturnHttpNotAcceptable = true; 
-} 
-).AddNewtonsoftJson(options =>
-{
-    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-
-    //Uncomment below section to remove camel case output format (default)
-    //if (options.SerializerSettings.ContractResolver != null)
-    //{
-    //    var castedResolver = options.SerializerSettings.ContractResolver as DefaultContractResolver;
-    //    castedResolver.NamingStrategy = null;
-    //}
-
-}
-            )
-.AddXmlDataContractSerializerFormatters(); //Add support for responses in XML format 
+StartupConfiguration.ConfigureControllers(builder);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHealthChecks();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
-builder.Services.AddTransient<IEmailService, TestEmailService>();
-builder.Services.AddScoped<ISourceService, SourceService>();
-builder.Services.AddScoped<ISourceRepository, SourceRepository>();
-builder.Services.AddScoped<ISupplierService, SupplierService>();
-builder.Services.AddScoped<ILeadService, LeadService>();
-builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
-builder.Services.AddScoped<IApiEndpointHandler, EndpointHandler>();
-builder.Services.AddScoped<ILeadRepository, LeadRepository>();
-builder.Services.AddScoped<ILeadTypeRepository, LeadTypeRepository>();
-builder.Services.AddScoped<ILeadAttributeRepository, LeadAttributeRepository>();
-builder.Services.AddDbContext<LeadManagerDbContext>(options => options.UseSqlServer(builder.Configuration["ConnectionStrings:LeadManagerDb"]));
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+StartupConfiguration.RegisterCustomDependencies(builder);
 
 var app = builder.Build();
 
@@ -101,8 +51,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-
 
 app.UseRouting().UseEndpoints(endpoints =>
 {
@@ -131,6 +79,7 @@ catch (Exception ex)
 }
 
 app.Run();
+
 
 //In normal circumstances the Program.cs is compiled into a private Program class that cannot be accessed out of this assembly
 //We add the following partial class so we can access Program from the IntegrationTests project
