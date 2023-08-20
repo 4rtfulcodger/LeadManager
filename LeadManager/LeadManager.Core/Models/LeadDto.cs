@@ -62,6 +62,15 @@ namespace LeadManager.Core.ViewModels
         public string Description { get; set; }
     }
 
+    public class LeadAttributeValueForCreateDto
+    {
+        public int LeadAttributeId { get; set; }
+
+        public string LeadAttributeName { get; set; }
+
+        public string AttributeValue { get; set; }
+    }
+
     public class LeadForCreateDto
     {
         public int LeadTypeId { get; set; }
@@ -74,6 +83,8 @@ namespace LeadManager.Core.ViewModels
         public string? Description { get; set; }
 
         public List<ContactForCreateDto> Contacts { get; set; }
+
+        public List<LeadAttributeValueForCreateDto> LeadAttributeValues { get; set; }
     }
 
     public class LeadTypeForUpdateDto

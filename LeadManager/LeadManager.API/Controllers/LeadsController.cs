@@ -77,6 +77,13 @@ namespace LeadManager.API.Controllers
             if (!_apiEndpointHandler.IsValidEntitySearchResult<Source>(source))
                 return BadRequest();
 
+            foreach (var leadAttributeValue in leadDto.LeadAttributeValues)
+            { 
+                var leadAttribute = await _leadService.GetLeadAttributeAsync(leadAttributeValue.LeadAttributeId);
+                if (!_apiEndpointHandler.IsValidEntitySearchResult<LeadAttribute>(leadAttribute))
+                    return BadRequest();
+            }
+
             var newLead = _mapper.Map<Lead>(leadDto);
 
             return _apiEndpointHandler.ReturnCreateResult<LeadForCreateDto>(await _leadService.CreateLeadAsync(newLead),
