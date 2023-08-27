@@ -26,7 +26,7 @@ namespace LeadManager.API.Controllers
         public ILeadService _leadService;
         public ISourceService _sourceService;
         public ISupplierService _supplierService;
-        private readonly IApiEndpointHandler _apiEndpointHandler;
+        private readonly IApiResponseHandler _apiEndpointHandler;
 
         public LeadsController(ILogger<FilesController> logger,
             IEmailService emailService,
@@ -34,7 +34,7 @@ namespace LeadManager.API.Controllers
             ILeadService leadService,
             ISupplierService supplierService,
             IMapper mapper,
-            IApiEndpointHandler apiEndpointHandler)
+            IApiResponseHandler apiEndpointHandler)
         {
             _logger = logger ?? throw new ArgumentException(nameof(logger));
             _emailService = emailService ?? throw new ArgumentException(nameof(emailService));

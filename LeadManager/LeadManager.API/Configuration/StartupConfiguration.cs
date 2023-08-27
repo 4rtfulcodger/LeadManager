@@ -28,7 +28,7 @@ namespace LeadManager.API.Configuration
             builder.Services.AddScoped<ISupplierService, SupplierService>();
             builder.Services.AddScoped<ILeadService, LeadService>();
             builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
-            builder.Services.AddScoped<IApiEndpointHandler, EndpointHandler>();
+            builder.Services.AddScoped<IApiResponseHandler, ApiResponseHandler>();
             builder.Services.AddScoped<ILeadRepository, LeadRepository>();
             builder.Services.AddScoped<ILeadTypeRepository, LeadTypeRepository>();
             builder.Services.AddScoped<ILeadAttributeRepository, LeadAttributeRepository>();

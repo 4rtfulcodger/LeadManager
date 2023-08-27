@@ -25,12 +25,12 @@ namespace LeadManager.API.Controllers
         private readonly ILogger<LeadTypesController> _logger;
         private readonly IMapper _mapper;
         public ILeadService _leadService;
-        private readonly IApiEndpointHandler _apiEndpointHandler;
+        private readonly IApiResponseHandler _apiEndpointHandler;
 
         public LeadTypesController(ILogger<LeadTypesController> logger,
             ILeadService leadService,
             IMapper mapper,
-            IApiEndpointHandler apiEndpointHandler)
+            IApiResponseHandler apiEndpointHandler)
         {
             _logger = logger ?? throw new ArgumentException(nameof(logger));
             _leadService = leadService ?? throw new ArgumentException(nameof(leadService));

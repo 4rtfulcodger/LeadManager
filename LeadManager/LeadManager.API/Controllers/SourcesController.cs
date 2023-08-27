@@ -15,12 +15,12 @@ namespace LeadManager.API.Controllers
         private readonly ILogger<FilesController> _logger;
         private readonly IMapper _mapper;
         private readonly ISourceService _sourceService;
-        private readonly IApiEndpointHandler _apiEndpointHandler;
+        private readonly IApiResponseHandler _apiEndpointHandler;
 
         public SourcesController(ISourceService sourceService,
             ILogger<FilesController> logger,
             IMapper mapper,
-            IApiEndpointHandler apiEndpointValidation)
+            IApiResponseHandler apiEndpointValidation)
         {
             _logger = logger ?? throw new ArgumentException(nameof(logger));
             _mapper = mapper ?? throw new ArgumentException(nameof(mapper));

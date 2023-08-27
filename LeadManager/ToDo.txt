@@ -9,7 +9,7 @@ Inner projects should define interfaces and outer projects should implement them
 
 
 1. Move ILeadDataRepository into Leads.Core. Move any other relevant interfaces into Leads.Core to avoid dependencies on Leads.data.
-   The idea is to avoid having LeadsAPI and LeadsCRM having any dependencies on Leads.Data
+   The idea is to avoid having LeadsAPI and LeadsCRM having any dependencies on Leads.Data. 
 
 1. Reduce complexity of ILeadDataRepository by composing it from a collection of smaller Interfaces. 
    This will be a better approach than defining a large amount of methods within ILeadDataRepository.
