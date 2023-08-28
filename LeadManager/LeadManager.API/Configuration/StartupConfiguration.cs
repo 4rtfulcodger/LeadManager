@@ -75,6 +75,7 @@ namespace LeadManager.API.Configuration
             {
                 //If Accept header value in the request is not supported, give back a 406 response saying it is not supported
                 options.ReturnHttpNotAcceptable = true;
+                options.Filters.Add<HttpResponseExceptionFilter>();
             }
             ).AddNewtonsoftJson(options =>
             {

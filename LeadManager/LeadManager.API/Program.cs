@@ -37,12 +37,16 @@ StartupConfiguration.ConfigureControllers(builder);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHealthChecks();
 builder.Services.AddSwaggerGen();
+builder.Services.AddProblemDetails();
 
 StartupConfiguration.RegisterCustomDependencies(builder);
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseExceptionHandler();
+app.UseStatusCodePages();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

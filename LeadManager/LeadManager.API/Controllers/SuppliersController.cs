@@ -62,8 +62,7 @@ namespace LeadManager.API.Controllers
         [HttpPatch("{supplierId}")]
         public async Task<IActionResult> UpdateSupplier(JsonPatchDocument<SupplierForUpdateDto> patchDocument, int supplierId)
         {
-            var supplierEntity = await _supplierService.GetSupplierWithIdAsync(supplierId);
-                        
+            var supplierEntity = await _supplierService.GetSupplierWithIdAsync(supplierId);                        
             _apiResponseHandler.ReturnNotFoundIfEntityDoesNotExist<Supplier>(supplierEntity);
 
             var supplierDto = _mapper.Map<SupplierForUpdateDto>(supplierEntity);
