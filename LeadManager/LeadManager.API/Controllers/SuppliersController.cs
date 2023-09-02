@@ -37,15 +37,15 @@ namespace LeadManager.API.Controllers
         [HttpGet()]
         public async Task<IActionResult> GetSuppliers()
         {
-            var getResult = await _supplierService.GetSuppliersAsync();
-            return _apiResponseHandler.ReturnSearchResult<IEnumerable<Supplier>, SupplierDto[]>(getResult);            
+            return _apiResponseHandler.ReturnSearchResult<IEnumerable<Supplier>, SupplierDto[]>(
+                await _supplierService.GetSuppliersAsync());            
         }
 
         [HttpGet("{id}", Name = "GetSupplier")]
         public async Task<IActionResult> GetSupplier(int id)
         {
-            var supplier = await _supplierService.GetSupplierWithIdAsync(id);
-            return _apiResponseHandler.ReturnSearchResult<Supplier, SupplierDto>(supplier);
+            return _apiResponseHandler.ReturnSearchResult<Supplier, SupplierDto>(
+                await _supplierService.GetSupplierWithIdAsync(id));
         }
 
         [HttpPost]
@@ -78,9 +78,7 @@ namespace LeadManager.API.Controllers
             _logger.Log(LogLevel.Debug, "Request to SuppliersController, DeleteSupplier action");
 
             var supplierToDelete = await _supplierService.GetSupplierWithIdAsync(id);
-
-            if (!_apiResponseHandler.IsValidEntitySearchResult<Supplier>(supplierToDelete))
-                return BadRequest();
+            _apiResponseHandler.ReturnNotFoundIfEntityDoesNotExist<Supplier>(supplierToDelete);
 
             return _apiResponseHandler.ReturnDeleteResult(await _supplierService.DeleteSupplier(supplierToDelete));
         }

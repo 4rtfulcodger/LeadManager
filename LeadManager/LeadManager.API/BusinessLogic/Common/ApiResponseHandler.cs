@@ -63,7 +63,7 @@ namespace LeadManager.API.BusinessLogic.Common
         {
             if(lookupResult == null)      
                 throw new HttpResponseException(statusCode:400,
-                    new ErrorResponse { Description = $"An entity of type {typeof(T).Name} was not Found" }
+                    new ErrorResponse { Error = $"An entity of type {typeof(T).Name} was not Found" }
                 );
         }
     }

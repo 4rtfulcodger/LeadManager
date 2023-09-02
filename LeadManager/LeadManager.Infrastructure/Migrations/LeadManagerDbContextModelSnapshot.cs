@@ -132,7 +132,7 @@ namespace LeadManager.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LeadId"));
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Error")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -174,7 +174,7 @@ namespace LeadManager.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Error")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -233,7 +233,7 @@ namespace LeadManager.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Error")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -288,7 +288,7 @@ namespace LeadManager.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SourceId"));
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Error")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -313,7 +313,7 @@ namespace LeadManager.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SupplierId"));
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Error")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 

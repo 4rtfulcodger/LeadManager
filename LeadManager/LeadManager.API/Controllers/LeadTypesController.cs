@@ -25,7 +25,7 @@ namespace LeadManager.API.Controllers
         private readonly ILogger<LeadTypesController> _logger;
         private readonly IMapper _mapper;
         public ILeadService _leadService;
-        private readonly IApiResponseHandler _apiEndpointHandler;
+        private readonly IApiResponseHandler _apiResponseHandler;
 
         public LeadTypesController(ILogger<LeadTypesController> logger,
             ILeadService leadService,
@@ -35,7 +35,7 @@ namespace LeadManager.API.Controllers
             _logger = logger ?? throw new ArgumentException(nameof(logger));
             _leadService = leadService ?? throw new ArgumentException(nameof(leadService));
             _mapper = mapper;
-            _apiEndpointHandler = apiEndpointHandler;
+            _apiResponseHandler = apiEndpointHandler;
         }       
 
         [HttpGet("{id}", Name = "GetLeadType")]
@@ -44,14 +44,14 @@ namespace LeadManager.API.Controllers
             _logger.Log(LogLevel.Debug, "GET request to LeadTypesController, GetLeadType action");
 
             var leadTypeToReturn = await _leadService.GetLeadTypeAsync(id);
-            return _apiEndpointHandler.ReturnSearchResult<LeadType, LeadTypeDto>(leadTypeToReturn);
+            return _apiResponseHandler.ReturnSearchResult<LeadType, LeadTypeDto>(leadTypeToReturn);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateLeadType(LeadTypeForCreateDto leadTypeForCreateDto)
         {
             var newLeadType = _mapper.Map<LeadType>(leadTypeForCreateDto);
-            return _apiEndpointHandler.ReturnCreateResult<LeadTypeForCreateDto>(await _leadService.CreateLeadTypeAsync(newLeadType),
+            return _apiResponseHandler.ReturnCreateResult<LeadTypeForCreateDto>(await _leadService.CreateLeadTypeAsync(newLeadType),
                 "GetLeadType",
                 newLeadType.LeadTypeId.ToString(),
                 newLeadType);
@@ -61,17 +61,14 @@ namespace LeadManager.API.Controllers
         public async Task<IActionResult> UpdateLeadType(JsonPatchDocument<LeadTypeForUpdateDto> patchDocument, int leadTypeId)
         {
             var leadTypeEntity = await _leadService.GetLeadTypeAsync(leadTypeId);
-            if (!_apiEndpointHandler.IsValidEntitySearchResult<LeadType>(leadTypeEntity))
-                return BadRequest();
+            _apiResponseHandler.ReturnNotFoundIfEntityDoesNotExist<LeadType>(leadTypeEntity);
 
             var leadTypeDto = _mapper.Map<LeadTypeForUpdateDto>(leadTypeEntity);
             patchDocument.ApplyTo(leadTypeDto);
-                      
-
             _mapper.Map(leadTypeDto, leadTypeEntity);
-            return _apiEndpointHandler.ReturndUpdateResult(await _leadService.UpdateLeadTypeAsync(leadTypeId));
-        }
 
+            return _apiResponseHandler.ReturndUpdateResult(await _leadService.UpdateLeadTypeAsync(leadTypeId));
+        }
 
         [HttpDelete("{id}", Name = "DeleteLeadType")]
         public async Task<IActionResult> DeleteLeadType(int id)
@@ -79,10 +76,9 @@ namespace LeadManager.API.Controllers
             _logger.Log(LogLevel.Debug, "Request to LeadTypesController, DeleteLeadType action");
 
             var leadTypeToDelete = await _leadService.GetLeadTypeAsync(id);
-            if (!_apiEndpointHandler.IsValidEntitySearchResult<LeadType>(leadTypeToDelete))
-                return BadRequest();
+            _apiResponseHandler.ReturnNotFoundIfEntityDoesNotExist<LeadType>(leadTypeToDelete);
 
-            return _apiEndpointHandler.ReturnDeleteResult(await _leadService.DeleteLeadType(leadTypeToDelete));
+            return _apiResponseHandler.ReturnDeleteResult(await _leadService.DeleteLeadType(leadTypeToDelete));
         }
     }
 }

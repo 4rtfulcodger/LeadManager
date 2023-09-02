@@ -8,6 +8,6 @@ namespace LeadManager.Core.Entities
 {
     public class ErrorResponse
     {
-        public string Description { get; set; }
+        public string Error { get; set; }
     }
 }

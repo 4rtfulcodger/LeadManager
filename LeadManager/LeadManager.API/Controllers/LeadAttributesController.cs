@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using LeadManager.Core.ViewModels;
 using LeadManager.Core.Entities;
+using LeadManager.API.BusinessLogic.Common;
+using LeadManager.Core.Entities.Source;
 
 namespace LeadManager.API.Controllers
 {
@@ -18,7 +20,7 @@ namespace LeadManager.API.Controllers
         private readonly ILogger<LeadAttributesController> _logger;
         private readonly IMapper _mapper;
         public ILeadService _leadService;
-        private readonly IApiResponseHandler _apiEndpointHandler;
+        private readonly IApiResponseHandler _apiResponseHandler;
 
         public LeadAttributesController(ILogger<LeadAttributesController> logger,
             ILeadService leadService,
@@ -28,7 +30,7 @@ namespace LeadManager.API.Controllers
             _logger = logger ?? throw new ArgumentException(nameof(logger));
             _leadService = leadService ?? throw new ArgumentException(nameof(leadService));
             _mapper = mapper;
-            _apiEndpointHandler = apiEndpointHandler;
+            _apiResponseHandler = apiEndpointHandler;
         }
 
         [HttpGet("{id}", Name = "GetLeadAttribute")]
@@ -37,7 +39,7 @@ namespace LeadManager.API.Controllers
             _logger.Log(LogLevel.Debug, "GET request to LeadAttributesController, GetLeadAttribute action");
 
             var leadAttributeToReturn = await _leadService.GetLeadAttributeAsync(id);
-            return _apiEndpointHandler.ReturnSearchResult<LeadAttribute, LeadAttributeDto>(leadAttributeToReturn);
+            return _apiResponseHandler.ReturnSearchResult<LeadAttribute, LeadAttributeDto>(leadAttributeToReturn);
         }
 
         [HttpGet("leadtype/{leadTypeId}", Name = "GetLeadAttributes")]
@@ -46,18 +48,17 @@ namespace LeadManager.API.Controllers
             _logger.Log(LogLevel.Debug, "GET request to LeadAttributesController, GetLeadAttributes action");
 
             var leadTypeEntity = await _leadService.GetLeadTypeAsync(leadTypeId);
-            if (!_apiEndpointHandler.IsValidEntitySearchResult<LeadType>(leadTypeEntity))
-                return BadRequest();
+            _apiResponseHandler.ReturnNotFoundIfEntityDoesNotExist<LeadType>(leadTypeEntity);
 
             var leadAttributesToReturn = await _leadService.GetLeadAttributesAsync(leadTypeId);
-            return _apiEndpointHandler.ReturnSearchResult<IEnumerable<LeadAttribute>,List<LeadAttributeDto>>(leadAttributesToReturn);
+            return _apiResponseHandler.ReturnSearchResult<IEnumerable<LeadAttribute>,List<LeadAttributeDto>>(leadAttributesToReturn);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateLeadAttribute(LeadAttributeForCreateDto leadAttributeForCreateDto)
         {
             var newLeadAttribute = _mapper.Map<LeadAttribute>(leadAttributeForCreateDto);
-            return _apiEndpointHandler.ReturnCreateResult<LeadAttributeForCreateDto>(await _leadService.CreateLeadAttributeAsync(newLeadAttribute),
+            return _apiResponseHandler.ReturnCreateResult<LeadAttributeForCreateDto>(await _leadService.CreateLeadAttributeAsync(newLeadAttribute),
                 "GetLeadAttribute",
                 newLeadAttribute.LeadAttributeId.ToString(),
                 newLeadAttribute);
@@ -67,17 +68,14 @@ namespace LeadManager.API.Controllers
         public async Task<IActionResult> UpdateLeadType(JsonPatchDocument<LeadAttributeForUpdateDto> patchDocument, int leadAttributeId)
         {
             var leadAttributeEntity = await _leadService.GetLeadAttributeAsync(leadAttributeId);
-            if (!_apiEndpointHandler.IsValidEntitySearchResult<LeadAttribute>(leadAttributeEntity))
-                return BadRequest();
+            _apiResponseHandler.ReturnNotFoundIfEntityDoesNotExist<LeadAttribute>(leadAttributeEntity);
 
             var leadAttributeDto = _mapper.Map<LeadAttributeForUpdateDto>(leadAttributeEntity);
             patchDocument.ApplyTo(leadAttributeDto);
 
-
             _mapper.Map(leadAttributeDto, leadAttributeEntity);
-            return _apiEndpointHandler.ReturndUpdateResult(await _leadService.UpdateLeadAttributeAsync(leadAttributeId));
+            return _apiResponseHandler.ReturndUpdateResult(await _leadService.UpdateLeadAttributeAsync(leadAttributeId));
         }
-
 
         [HttpDelete("{id}", Name = "DeleteLeadAttribute")]
         public async Task<IActionResult> DeleteLeadAttribute(int id)
@@ -85,10 +83,9 @@ namespace LeadManager.API.Controllers
             _logger.Log(LogLevel.Debug, "Request to LeadAttributesController, DeleteLeadAttribute action");
 
             var leadAttributeToDelete = await _leadService.GetLeadAttributeAsync(id);
-            if (!_apiEndpointHandler.IsValidEntitySearchResult<LeadAttribute>(leadAttributeToDelete))
-                return BadRequest();
+            _apiResponseHandler.ReturnNotFoundIfEntityDoesNotExist<LeadAttribute>(leadAttributeToDelete);
 
-            return _apiEndpointHandler.ReturnDeleteResult(await _leadService.DeleteLeadAttribute(leadAttributeToDelete));
+            return _apiResponseHandler.ReturnDeleteResult(await _leadService.DeleteLeadAttribute(leadAttributeToDelete));
         }
     }
 }

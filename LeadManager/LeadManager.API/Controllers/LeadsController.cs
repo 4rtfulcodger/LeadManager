@@ -26,7 +26,7 @@ namespace LeadManager.API.Controllers
         public ILeadService _leadService;
         public ISourceService _sourceService;
         public ISupplierService _supplierService;
-        private readonly IApiResponseHandler _apiEndpointHandler;
+        private readonly IApiResponseHandler _apiResponseHandler;
 
         public LeadsController(ILogger<FilesController> logger,
             IEmailService emailService,
@@ -42,15 +42,15 @@ namespace LeadManager.API.Controllers
             _supplierService = supplierService ?? throw new ArgumentException(nameof(supplierService));
             _leadService = leadService ?? throw new ArgumentException(nameof(leadService));
             _mapper = mapper;
-            _apiEndpointHandler = apiEndpointHandler;
+            _apiResponseHandler = apiEndpointHandler;
         }
 
 
         [HttpGet()]
         public async Task<IActionResult> GetLeads(LeadFilter leadFilter)
         {            
-            var leads = await _leadService.GetLeadsAsync(leadFilter);
-            return _apiEndpointHandler.ReturnSearchResult<IEnumerable<Lead>,IEnumerable<LeadDto>>(leads);        
+            return _apiResponseHandler.ReturnSearchResult<IEnumerable<Lead>,IEnumerable<LeadDto>>(
+                await _leadService.GetLeadsAsync(leadFilter));        
         }
 
         [HttpGet("{id}", Name = "GetLead")]
@@ -59,59 +59,61 @@ namespace LeadManager.API.Controllers
             _logger.Log(LogLevel.Debug, "GET request to LeadsController, GetLead action");
                         
             var leadToReturn = await _leadService.GetLeadWithIdAsync(id, true, true, true);
-            return _apiEndpointHandler.ReturnSearchResult<Lead,LeadDto>(leadToReturn);
+            return _apiResponseHandler.ReturnSearchResult<Lead,LeadDto>(leadToReturn);
         }        
 
         [HttpPost]
         public async Task<IActionResult> CreateLead(LeadForCreateDto leadDto)
         {
-            var leadType = await _leadService.GetLeadTypeAsync(leadDto.LeadTypeId);
-            if (!_apiEndpointHandler.IsValidEntitySearchResult<LeadType>(leadType))
-                return BadRequest();
-
-            var supplier = await _supplierService.GetSupplierWithIdAsync(leadDto.SupplierId);
-            if(!_apiEndpointHandler.IsValidEntitySearchResult<Supplier>(supplier))
-                return BadRequest();
-
-            var source = await _sourceService.GetSourceWithIdAsync(leadDto.SourceId);
-            if (!_apiEndpointHandler.IsValidEntitySearchResult<Source>(source))
-                return BadRequest();
-
-            foreach (var leadAttributeValue in leadDto.LeadAttributeValues)
-            { 
-                var leadAttribute = await _leadService.GetLeadAttributeAsync(leadAttributeValue.LeadAttributeId);
-                if (!_apiEndpointHandler.IsValidEntitySearchResult<LeadAttribute>(leadAttribute))
-                    return BadRequest();
-            }
-
+            await ValidateLeadForCreateDto(leadDto);
             var newLead = _mapper.Map<Lead>(leadDto);
 
-            return _apiEndpointHandler.ReturnCreateResult<LeadForCreateDto>(await _leadService.CreateLeadAsync(newLead),
+            return _apiResponseHandler.ReturnCreateResult<LeadForCreateDto>(await _leadService.CreateLeadAsync(newLead),
                 "GetLead",
                 newLead.LeadId.ToString(),
                 newLead);
         }
 
+        private async Task ValidateLeadForCreateDto(LeadForCreateDto leadDto)
+        {
+            var leadType = await _leadService.GetLeadTypeAsync(leadDto.LeadTypeId);
+            _apiResponseHandler.ReturnNotFoundIfEntityDoesNotExist<LeadType>(leadType);
+
+            var supplier = await _supplierService.GetSupplierWithIdAsync(leadDto.SupplierId);
+            _apiResponseHandler.ReturnNotFoundIfEntityDoesNotExist<Supplier>(supplier);
+
+            var source = await _sourceService.GetSourceWithIdAsync(leadDto.SourceId);
+            _apiResponseHandler.ReturnNotFoundIfEntityDoesNotExist<Source>(source);
+
+            foreach (var leadAttributeValue in leadDto.LeadAttributeValues)
+            {
+                var leadAttribute = await _leadService.GetLeadAttributeAsync(leadAttributeValue.LeadAttributeId);
+                _apiResponseHandler.ReturnNotFoundIfEntityDoesNotExist<LeadAttribute>(leadAttribute);
+            }
+        }
+
         [HttpPatch("{leadId}")]
         public async Task<IActionResult> UpdateLead(JsonPatchDocument<LeadForUpdateDto> patchDocument, int leadId)
         {
+            await ValidateLeadDetailsAndMapChanges(patchDocument, leadId);
+            return _apiResponseHandler.ReturndUpdateResult(await _leadService.UpdateLeadAsync(leadId));
+        }
+
+        private async Task ValidateLeadDetailsAndMapChanges(JsonPatchDocument<LeadForUpdateDto> patchDocument, int leadId)
+        {
             var leadEntity = await _leadService.GetLeadWithIdAsync(leadId, false, false);
-            if (!_apiEndpointHandler.IsValidEntitySearchResult<Lead>(leadEntity))
-                return BadRequest();
+            _apiResponseHandler.ReturnNotFoundIfEntityDoesNotExist<Lead>(leadEntity);
 
             var leadDto = _mapper.Map<LeadForUpdateDto>(leadEntity);
             patchDocument.ApplyTo(leadDto);
 
             var supplier = await _supplierService.GetSupplierWithIdAsync(leadDto.SupplierId);
-            if (!_apiEndpointHandler.IsValidEntitySearchResult<Supplier>(supplier))
-                return BadRequest();
+            _apiResponseHandler.ReturnNotFoundIfEntityDoesNotExist<Supplier>(supplier);
 
             var source = await _sourceService.GetSourceWithIdAsync(leadDto.SourceId);
-            if (!_apiEndpointHandler.IsValidEntitySearchResult<Source>(source))
-                return BadRequest();
+            _apiResponseHandler.ReturnNotFoundIfEntityDoesNotExist<Source>(source);
 
-            _mapper.Map(leadDto, leadEntity);          
-            return _apiEndpointHandler.ReturndUpdateResult(await _leadService.UpdateLeadAsync(leadId));
+            _mapper.Map(leadDto, leadEntity);
         }
 
         [HttpDelete("{id}", Name = "DeleteLead")]
@@ -120,10 +122,9 @@ namespace LeadManager.API.Controllers
             _logger.Log(LogLevel.Debug, "Request to LeadsController, DeleteLead action");                       
 
             var leadToDelete = await _leadService.GetLeadWithIdAsync(id);
-            if (!_apiEndpointHandler.IsValidEntitySearchResult<Lead>(leadToDelete))
-                return BadRequest();
+            _apiResponseHandler.ReturnNotFoundIfEntityDoesNotExist<Lead>(leadToDelete);
 
-            return _apiEndpointHandler.ReturnDeleteResult(await _leadService.DeleteLead(leadToDelete));
+            return _apiResponseHandler.ReturnDeleteResult(await _leadService.DeleteLead(leadToDelete));
         }
     }
 }
