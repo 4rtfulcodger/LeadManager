@@ -66,6 +66,14 @@ namespace LeadManager.API.BusinessLogic.Common
                     new ErrorResponse { Error = $"An entity of type {typeof(T).Name} was not Found" }
                 );
         }
+
+        public void ReturnBadRequestIfNull<T>(object obj, string errorMessage)
+        {
+            if (obj == null)
+                throw new HttpResponseException(statusCode: 400,
+                    new ErrorResponse { Error = $"{typeof(T).Name} was null. {errorMessage}" }
+                );
+        }
     }
 
     

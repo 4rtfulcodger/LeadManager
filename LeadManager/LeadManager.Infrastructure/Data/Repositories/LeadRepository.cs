@@ -44,9 +44,13 @@ namespace LeadManager.Infrastructure.Data.Repositories
                 leads = leads.Include(l => l.Contacts)
                              .ThenInclude(c => c.PhoneNumbers)
                              .Include(c => c.Contacts)
-                             .ThenInclude(c => c.Addresses);           
+                             .ThenInclude(c => c.Addresses);
 
-            if (leadFilter.supplierIds.Count() > 0)
+            if (leadFilter.IncludeAttributes)
+                leads = leads.Include(l => l.LeadAttributeValues)
+                     .ThenInclude(l => l.Attribute); 
+
+                if (leadFilter.supplierIds.Count() > 0)
                 leads = leads.Where(l => leadFilter.supplierIds.Contains(l.SupplierId)); 
 
 
@@ -56,7 +60,8 @@ namespace LeadManager.Infrastructure.Data.Repositories
         public async Task<Lead?> GetLeadWithIdAsync(int Id, 
             bool includeSource = false,
             bool includeSupplier = false,
-            bool includeContacts = false)
+            bool includeContacts = false,
+            bool includeLeadAttributes =false)
         {
             IQueryable<Lead> leads = _dbContext.Leads; 
 
@@ -70,7 +75,11 @@ namespace LeadManager.Infrastructure.Data.Repositories
                 leads = leads.Include(l => l.Contacts)
                              .ThenInclude(c => c.PhoneNumbers)
                              .Include(c => c.Contacts)
-                             .ThenInclude(c => c.Addresses);
+                             .ThenInclude(c => c.Addresses);                       
+
+            if (includeLeadAttributes)
+                leads = leads.Include(l => l.LeadAttributeValues)
+                    .ThenInclude(l => l.Attribute);
 
             return await leads.Where(l => l.LeadId == Id).FirstOrDefaultAsync();
         }

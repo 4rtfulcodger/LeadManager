@@ -85,7 +85,10 @@ namespace LeadManager.API.Profiles
 
             #region LeadAttributeValue
 
-            CreateMap<LeadAttributeValue, LeadAttributeValueForCreateDto>().ReverseMap();            
+            CreateMap<LeadAttributeValue, LeadAttributeValueForCreateDto>().ReverseMap();
+            CreateMap<LeadAttributeValue, LeadAttributeValueDto>()
+                .ForMember(l => l.LeadAttributeName, opt => opt.MapFrom(lavfcd => lavfcd.Attribute.Name))
+                .ReverseMap();
 
             #endregion
         }

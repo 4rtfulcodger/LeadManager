@@ -14,7 +14,8 @@ namespace LeadManager.Core.Interfaces.Lead
         Task<Entities.Lead?> GetLeadWithIdAsync(int Id,
             bool includeSource = false,
             bool includeSupplier = false,
-            bool includeContacts = false);
+            bool includeContacts = false,
+            bool includeAttributes = false);
         Task<bool> DeleteLeadType(Entities.LeadType leadType);
         Task<bool> DeleteLead(Entities.Lead lead);
 

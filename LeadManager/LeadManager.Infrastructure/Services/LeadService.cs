@@ -63,12 +63,14 @@ namespace LeadManager.Infrastructure.Services
         public async Task<Lead?> GetLeadWithIdAsync(int Id,
             bool includeSource = false,
             bool includeSupplier = false,
-            bool includeContacts = false)
+            bool includeContacts = false,
+            bool includeAttributes = false)
         {
             return await _leadRepository.GetLeadWithIdAsync(Id,
                 includeSource,
                 includeSupplier,
-                includeContacts);
+                includeContacts,
+                includeAttributes);
         }
 
         public async Task<bool> UpdateLeadAsync(int Id)

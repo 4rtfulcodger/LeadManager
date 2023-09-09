@@ -12,6 +12,7 @@ using LeadManager.Core.Interfaces.Supplier;
 using LeadManager.Core.Entities.Source;
 using LeadManager.Core.Entities.Supplier;
 using LeadManager.Core.Entities;
+using LeadManager.API.BusinessLogic.Common;
 
 namespace LeadManager.API.Controllers
 {
@@ -48,7 +49,7 @@ namespace LeadManager.API.Controllers
 
         [HttpGet()]
         public async Task<IActionResult> GetLeads(LeadFilter leadFilter)
-        {            
+        {
             return _apiResponseHandler.ReturnSearchResult<IEnumerable<Lead>,IEnumerable<LeadDto>>(
                 await _leadService.GetLeadsAsync(leadFilter));        
         }
@@ -58,7 +59,7 @@ namespace LeadManager.API.Controllers
         {
             _logger.Log(LogLevel.Debug, "GET request to LeadsController, GetLead action");
                         
-            var leadToReturn = await _leadService.GetLeadWithIdAsync(id, true, true, true);
+            var leadToReturn = await _leadService.GetLeadWithIdAsync(id, true, true, true, true);
             return _apiResponseHandler.ReturnSearchResult<Lead,LeadDto>(leadToReturn);
         }        
 
@@ -85,10 +86,16 @@ namespace LeadManager.API.Controllers
             var source = await _sourceService.GetSourceWithIdAsync(leadDto.SourceId);
             _apiResponseHandler.ReturnNotFoundIfEntityDoesNotExist<Source>(source);
 
+            var leadAttributesForLeadType = await _leadService.GetLeadAttributesAsync(leadType.LeadTypeId);
+
             foreach (var leadAttributeValue in leadDto.LeadAttributeValues)
             {
-                var leadAttribute = await _leadService.GetLeadAttributeAsync(leadAttributeValue.LeadAttributeId);
-                _apiResponseHandler.ReturnNotFoundIfEntityDoesNotExist<LeadAttribute>(leadAttribute);
+                var leadAttributeForLeadType = leadAttributesForLeadType.Where(l => l.Name == leadAttributeValue.LeadAttributeName).FirstOrDefault();
+
+                _apiResponseHandler.ReturnBadRequestIfNull<LeadAttribute>(leadAttributeForLeadType,
+                    $"The lead attribute {leadAttributeValue.LeadAttributeName} is not valid for lead type {leadType.Name}");
+
+                leadAttributeValue.LeadAttributeId = leadAttributeForLeadType.LeadAttributeId; 
             }
         }
 

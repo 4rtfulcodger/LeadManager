@@ -13,6 +13,8 @@ namespace LeadManager.Core.Interfaces
 
         void ReturnNotFoundIfEntityDoesNotExist<T>(object lookupResult);
 
+        void ReturnBadRequestIfNull<T>(object obj, string errorMessage);
+
         IActionResult ReturnSearchResult<Ts, TOut>(object searchResult);
         IActionResult ReturnCreateResult<TOut>(bool createdResult, string route, string Id, object newSource);
         IActionResult ReturndUpdateResult(bool updateSuccess);
