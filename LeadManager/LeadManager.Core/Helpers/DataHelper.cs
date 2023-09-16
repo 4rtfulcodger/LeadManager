@@ -156,6 +156,6 @@ namespace LeadManager.Core.Helpers
             set => _pageSize = (value > maxPageSize) ? maxPageSize : value;
         }
 
-        public string OrderBy { get; set; } = "DateCreated";
+        public string OrderBy { get; set; } = "CreatedDate";
     }
 }

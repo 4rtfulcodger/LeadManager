@@ -36,6 +36,7 @@ namespace LeadManager.Infrastructure.Services
         public async Task<bool> CreateLeadAsync(Lead lead)
         {
             lead.LeadRef = LeadHelper.GenerateLeadReference();
+            lead.CreatedDate = DateTime.Now;
 
             return await _leadRepository.CreateLeadAsync(lead);
         }        

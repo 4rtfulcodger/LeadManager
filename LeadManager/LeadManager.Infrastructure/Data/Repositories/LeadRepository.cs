@@ -32,29 +32,38 @@ namespace LeadManager.Infrastructure.Data.Repositories
 
         public async Task<IEnumerable<Lead>> GetLeadsAsync(LeadFilter leadFilter)
         {
-            IQueryable<Lead> leads = _dbContext.Leads;
+            IQueryable<Lead> filteredLeads = _dbContext.Leads;
 
             if (leadFilter.IncludeSource)
-                leads = leads.Include(l => l.Source);
+                filteredLeads = filteredLeads.Include(l => l.Source);
 
             if (leadFilter.IncludeSupplier)
-                leads = leads.Include(l => l.Supplier);
+                filteredLeads = filteredLeads.Include(l => l.Supplier);
 
             if(leadFilter.IncludeContacts)
-                leads = leads.Include(l => l.Contacts)
+                filteredLeads = filteredLeads.Include(l => l.Contacts)
                              .ThenInclude(c => c.PhoneNumbers)
                              .Include(c => c.Contacts)
                              .ThenInclude(c => c.Addresses);
 
             if (leadFilter.IncludeAttributes)
-                leads = leads.Include(l => l.LeadAttributeValues)
-                     .ThenInclude(l => l.Attribute); 
+                filteredLeads = filteredLeads.Include(l => l.LeadAttributeValues)
+                     .ThenInclude(l => l.Attribute);
 
-                if (leadFilter.supplierIds.Count() > 0)
-                leads = leads.Where(l => leadFilter.supplierIds.Contains(l.SupplierId)); 
+            //If filter contains a list of lead Ids, search for filteredLeads containing those lead Ids
+            //Else, search using CreatedDate
+            if (leadFilter.supplierIds.Count() > 0)
+            {
+                filteredLeads = filteredLeads.Where(l => leadFilter.supplierIds.Contains(l.SupplierId));
+            }
+            else
+            {
+                filteredLeads = filteredLeads.Where(ld => ld.CreatedDate >= leadFilter.FromCreatedDate)
+                                               .Where(ld => ld.CreatedDate <= leadFilter.ToCreatedDate);
+            }
 
 
-            return await leads.ToListAsync();
+            return await filteredLeads.ToListAsync();
         }
 
         public async Task<Lead?> GetLeadWithIdAsync(int Id, 

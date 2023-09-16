@@ -69,7 +69,7 @@ namespace LeadManager.API.Controllers
             await ValidateLeadForCreateDto(leadDto);
             var newLead = _mapper.Map<Lead>(leadDto);
 
-            return _apiResponseHandler.ReturnCreateResult<LeadForCreateDto>(await _leadService.CreateLeadAsync(newLead),
+            return _apiResponseHandler.ReturnCreateResult<LeadDto>(await _leadService.CreateLeadAsync(newLead),
                 "GetLead",
                 newLead.LeadId.ToString(),
                 newLead);

@@ -40,6 +40,10 @@ namespace LeadManager.Core.ViewModels
 
         public SupplierDto? Supplier { get; set; }
 
+        public DateTime CreatedDate { get; set; }
+
+        public DateTime? ModifiedDate { get; set; }
+
         public List<ContactDto>? Contacts { get; set; }
 
         public List<LeadAttributeValueDto>? LeadAttributeValues { get; set; }
@@ -120,5 +124,7 @@ namespace LeadManager.Core.ViewModels
 
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
+
+        public DateTime ModifiedDate { get; set; } = DateTime.Now;
     }
 }

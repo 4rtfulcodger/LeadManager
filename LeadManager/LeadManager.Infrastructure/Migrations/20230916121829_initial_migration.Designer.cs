@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LeadManager.Infrastructure.Migrations
 {
     [DbContext(typeof(LeadManagerDbContext))]
-    [Migration("20230805131343_initial_migration")]
+    [Migration("20230916121829_initial_migration")]
     partial class initialmigration
     {
         /// <inheritdoc />
@@ -135,7 +135,10 @@ namespace LeadManager.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LeadId"));
 
-                    b.Property<string>("Error")
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -145,6 +148,9 @@ namespace LeadManager.Infrastructure.Migrations
 
                     b.Property<int>("LeadTypeId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -177,7 +183,7 @@ namespace LeadManager.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Error")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -236,7 +242,7 @@ namespace LeadManager.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Error")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -291,7 +297,7 @@ namespace LeadManager.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SourceId"));
 
-                    b.Property<string>("Error")
+                    b.Property<string>("Description")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -316,7 +322,7 @@ namespace LeadManager.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SupplierId"));
 
-                    b.Property<string>("Error")
+                    b.Property<string>("Description")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 

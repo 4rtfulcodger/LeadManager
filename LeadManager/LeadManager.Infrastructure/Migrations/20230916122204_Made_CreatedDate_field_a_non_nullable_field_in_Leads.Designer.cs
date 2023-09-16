@@ -4,6 +4,7 @@ using LeadManager.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LeadManager.Infrastructure.Migrations
 {
     [DbContext(typeof(LeadManagerDbContext))]
-    partial class LeadManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230916122204_Made_CreatedDate_field_a_non_nullable_field_in_Leads")]
+    partial class MadeCreatedDatefieldanonnullablefieldinLeads
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
