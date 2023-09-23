@@ -30,7 +30,7 @@ namespace LeadManager.Infrastructure.Data.Repositories
             return (await _dbContext.SaveChangesAsync() >= 0);
         }
 
-        public async Task<IEnumerable<Lead>> GetLeadsAsync(LeadFilter leadFilter)
+        public async Task<PagedList<Lead>> GetLeadsAsync(LeadFilter leadFilter)
         {
             IQueryable<Lead> filteredLeads = _dbContext.Leads;
 
@@ -62,8 +62,7 @@ namespace LeadManager.Infrastructure.Data.Repositories
                                                .Where(ld => ld.CreatedDate <= leadFilter.ToCreatedDate);
             }
 
-
-            return await filteredLeads.ToListAsync();
+            return await PagedList<Lead>.Create(filteredLeads, leadFilter.PageNumber, leadFilter.PageSize); 
         }
 
         public async Task<Lead?> GetLeadWithIdAsync(int Id, 

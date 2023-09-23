@@ -10,7 +10,7 @@ namespace LeadManager.Core.Interfaces.Lead
         Task<bool> UpdateLeadTypeAsync(int Id);
         Task<bool> UpdateLeadAsync(int Id);        
         Task<Entities.LeadType?> GetLeadTypeAsync(int leadTypeId);
-        Task<IEnumerable<Entities.Lead>> GetLeadsAsync(LeadFilter leadFilter);
+        Task<PagedList<Entities.Lead>> GetLeadsAsync(LeadFilter leadFilter);
         Task<Entities.Lead?> GetLeadWithIdAsync(int Id,
             bool includeSource = false,
             bool includeSupplier = false,

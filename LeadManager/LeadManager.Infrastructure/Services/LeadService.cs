@@ -51,7 +51,7 @@ namespace LeadManager.Infrastructure.Services
             return await _leadRepository.DeleteLead(lead);
         }
 
-        public async Task<IEnumerable<Lead>> GetLeadsAsync(LeadFilter leadFilter)
+        public async Task<PagedList<Lead>> GetLeadsAsync(LeadFilter leadFilter)
         {
             return await _leadRepository.GetLeadsAsync(leadFilter);
         }

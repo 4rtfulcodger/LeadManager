@@ -13,6 +13,8 @@ using LeadManager.Core.Entities.Source;
 using LeadManager.Core.Entities.Supplier;
 using LeadManager.Core.Entities;
 using LeadManager.API.BusinessLogic.Common;
+using System.Text.Json;
+
 
 namespace LeadManager.API.Controllers
 {
@@ -50,8 +52,10 @@ namespace LeadManager.API.Controllers
         [HttpGet()]
         public async Task<IActionResult> GetLeads(LeadFilter leadFilter)
         {
-            return _apiResponseHandler.ReturnSearchResult<IEnumerable<Lead>,IEnumerable<LeadDto>>(
-                await _leadService.GetLeadsAsync(leadFilter));        
+            var filteredLeads = await _leadService.GetLeadsAsync(leadFilter);
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PagedList<Lead>.GetPaginationMetadata(filteredLeads)));
+
+            return _apiResponseHandler.ReturnSearchResult<IEnumerable<Lead>,IEnumerable<LeadDto>>(filteredLeads);        
         }
 
         [HttpGet("{id}", Name = "GetLead")]
