@@ -1,5 +1,6 @@
 ﻿using LeadManager.Core.Entities.Source;
 using LeadManager.Core.Entities.Supplier;
+using LeadManager.Core.Helpers;
 using LeadManager.Core.Interfaces.Supplier;
 using LeadManager.Core.ViewModels;
 using LeadManager.Infrastructure.Data.Repositories;
@@ -35,9 +36,9 @@ namespace LeadManager.Infrastructure.Services
             return await _supplierRepository.DeleteSupplier(supplier);
         }
 
-        public async Task<IEnumerable<Supplier>> GetSuppliersAsync()
+        public async Task<PagedList<Supplier>> GetSuppliersAsync(SupplierFilter filter)
         {
-           return await _supplierRepository.GetSuppliersAsync();
+           return await _supplierRepository.GetSuppliersAsync(filter);
         }
 
         public async Task<Supplier?> GetSupplierWithIdAsync(int Id)

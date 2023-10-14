@@ -127,6 +127,16 @@ namespace LeadManager.Core.Helpers
                 
     }
 
+    public class SupplierFilter : IFilter
+    {
+        public DateTime FromCreatedDate { get; set; }
+        public bool IncludeAttributes { get; set; }
+        public string OrderBy { get; set; }
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
+        public DateTime ToCreatedDate { get; set; }
+    }
+
     public class LeadFilter : IFilter
     {
         public List<int> leadIds { get; set; } = new List<int>();

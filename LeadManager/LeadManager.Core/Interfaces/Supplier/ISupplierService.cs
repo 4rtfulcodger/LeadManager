@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LeadManager.Core.Entities.Supplier;
+using LeadManager.Core.Helpers;
 
 namespace LeadManager.Core.Interfaces.Supplier
 {
@@ -11,7 +12,7 @@ namespace LeadManager.Core.Interfaces.Supplier
     {
         Task<bool> AddSupplierAsync(LeadManager.Core.Entities.Supplier.Supplier supplier);
         Task<bool> UpdateSupplierAsync(int Id);
-        Task<IEnumerable<LeadManager.Core.Entities.Supplier.Supplier>> GetSuppliersAsync();
+        Task<PagedList<LeadManager.Core.Entities.Supplier.Supplier>> GetSuppliersAsync(SupplierFilter filter);
         Task<LeadManager.Core.Entities.Supplier.Supplier?> GetSupplierWithIdAsync(int Id);
         Task<bool> DeleteSupplier(LeadManager.Core.Entities.Supplier.Supplier supplier);
     }

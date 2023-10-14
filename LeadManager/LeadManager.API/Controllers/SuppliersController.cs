@@ -2,11 +2,13 @@
 using LeadManager.Core.Entities;
 using LeadManager.Core.Entities.Source;
 using LeadManager.Core.Entities.Supplier;
+using LeadManager.Core.Helpers;
 using LeadManager.Core.Interfaces;
 using LeadManager.Core.Interfaces.Supplier;
 using LeadManager.Core.ViewModels;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace LeadManager.API.Controllers
 {
@@ -35,10 +37,12 @@ namespace LeadManager.API.Controllers
 
 
         [HttpGet()]
-        public async Task<IActionResult> GetSuppliers()
+        public async Task<IActionResult> GetSuppliers(SupplierFilter filter)
         {
-            return _apiResponseHandler.ReturnSearchResult<IEnumerable<Supplier>, SupplierDto[]>(
-                await _supplierService.GetSuppliersAsync());            
+            var filteredSuppliers = await _supplierService.GetSuppliersAsync(filter);
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PagedList<Supplier>.GetPaginationMetadata(filteredSuppliers)));
+
+            return _apiResponseHandler.ReturnSearchResult<IEnumerable<Supplier>, SupplierDto[]>(filteredSuppliers);            
         }
 
         [HttpGet("{id}", Name = "GetSupplier")]
