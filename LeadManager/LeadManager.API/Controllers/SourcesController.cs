@@ -2,11 +2,13 @@
 using LeadManager.API.BusinessLogic.Common;
 using LeadManager.Core.Entities.Source;
 using LeadManager.Core.Entities.Supplier;
+using LeadManager.Core.Helpers;
 using LeadManager.Core.Interfaces;
 using LeadManager.Core.Interfaces.Source;
 using LeadManager.Core.ViewModels;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace LeadManager.API.Controllers
 {
@@ -28,14 +30,15 @@ namespace LeadManager.API.Controllers
             _mapper = mapper ?? throw new ArgumentException(nameof(mapper));
             _sourceService = sourceService ?? throw new ArgumentException(nameof(sourceService));
             _apiResponseHandler = apiEndpointValidation ?? throw new ArgumentException(nameof(apiEndpointValidation));
-        }       
+        }
 
         [HttpGet()]
-        public async Task<IActionResult> GetSources()
+        public async Task<IActionResult> GetSources(SourceFilter filter)
         {
-            //Need to add a filter parameter
-            return _apiResponseHandler.ReturnSearchResult<IEnumerable<Source>, SourceDto[]>(
-                await _sourceService.GetSourcesAsync());
+            var filteredSources = await _sourceService.GetSourcesAsync(filter);
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PagedList<Source>.GetPaginationMetadata(filteredSources)));
+
+            return _apiResponseHandler.ReturnSearchResult<IEnumerable<Source>, SourceDto[]>(filteredSources);
         }
 
         [HttpGet("{id}", Name = "GetSource")]

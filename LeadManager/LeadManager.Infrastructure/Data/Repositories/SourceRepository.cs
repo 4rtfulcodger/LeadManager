@@ -1,4 +1,6 @@
 ﻿using LeadManager.Core.Entities.Source;
+using LeadManager.Core.Entities.Supplier;
+using LeadManager.Core.Helpers;
 using LeadManager.Core.Interfaces.Source;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -32,6 +34,12 @@ namespace LeadManager.Infrastructure.Data.Repositories
         public async Task<IEnumerable<Source>> GetSourcesAsync()
         {
             return await _dbContext.Sources.ToListAsync();
+        }
+
+        public async Task<PagedList<Source>> GetSourcesAsync(SourceFilter filter)
+        {
+            IQueryable<Source> filteredSources = _dbContext.Sources;
+            return await PagedList<Source>.Create(filteredSources, filter.PageNumber, filter.PageSize);
         }
 
         public async Task<Source?> GetSourceWithIdAsync(int Id)

@@ -1,4 +1,5 @@
 ﻿using LeadManager.Core.Entities.Source;
+using LeadManager.Core.Helpers;
 using LeadManager.Core.Interfaces.Source;
 using Microsoft.Extensions.Logging;
 
@@ -22,17 +23,15 @@ namespace LeadManager.Infrastructure.Services
            sourceDto.SourceRef = Guid.NewGuid();
            return await _sourceRepository.AddSourceAsync(sourceDto);
         }
-       
-        //Need to add a filter parameter
-        public async Task<IEnumerable<Source>> GetSourcesAsync()
-        {            
-            return await _sourceRepository.GetSourcesAsync();
+
+        public async Task<PagedList<Source>> GetSourcesAsync(SourceFilter filter)
+        {
+            return await _sourceRepository.GetSourcesAsync(filter);
         }
 
         public async Task<Source> GetSourceWithIdAsync(int id)
         {
-            return await _sourceRepository.GetSourceWithIdAsync(id);
-            
+            return await _sourceRepository.GetSourceWithIdAsync(id);            
         }
 
         public async Task<bool> UpdateSourceAsync(int sourceId)
