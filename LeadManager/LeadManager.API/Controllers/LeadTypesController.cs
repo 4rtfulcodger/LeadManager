@@ -13,6 +13,7 @@ using LeadManager.Core.Entities.Source;
 using LeadManager.Core.Entities.Supplier;
 using LeadManager.Core.Entities;
 using LeadManager.Infrastructure.Services;
+using System.Text.Json;
 
 namespace LeadManager.API.Controllers
 {
@@ -36,7 +37,18 @@ namespace LeadManager.API.Controllers
             _leadService = leadService ?? throw new ArgumentException(nameof(leadService));
             _mapper = mapper;
             _apiResponseHandler = apiEndpointHandler;
-        }       
+        }
+
+        [HttpGet()]
+        public async Task<IActionResult> GetLeadTypes(LeadTypeFilter filter)
+        {
+            _logger.Log(LogLevel.Debug, "GET request to LeadTypesController, GetLeadTypes action");
+
+            var filteredLeadTypes = await _leadService.GetLeadTypesAsync(filter);
+
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PagedList<LeadType>.GetPaginationMetadata(filteredLeadTypes)));
+            return _apiResponseHandler.ReturnSearchResult<IEnumerable<LeadType>, LeadTypeDto[]>(filteredLeadTypes);            
+        }
 
         [HttpGet("{id}", Name = "GetLeadType")]
         public async Task<IActionResult> GetLeadType(int id)

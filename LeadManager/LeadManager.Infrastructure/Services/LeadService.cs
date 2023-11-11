@@ -61,6 +61,11 @@ namespace LeadManager.Infrastructure.Services
             return await _leadTypeRepository.GetLeadTypeAsync(leadTypeId);
         }
 
+        public async Task<PagedList<LeadType>> GetLeadTypesAsync(LeadTypeFilter filter)
+        {
+            return await _leadTypeRepository.GetLeadTypesAsync(filter);
+        }
+
         public async Task<Lead?> GetLeadWithIdAsync(int Id,
             bool includeSource = false,
             bool includeSupplier = false,

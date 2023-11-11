@@ -30,6 +30,12 @@ namespace LeadManager.Infrastructure.Data.Repositories
             return (await _dbContext.SaveChangesAsync() >= 0);
         }
 
+        public async Task<PagedList<LeadType>> GetLeadTypesAsync(LeadTypeFilter filter)
+        {
+            IQueryable<LeadType> filteredLeadTypes = _dbContext.LeadType;
+            return await PagedList<LeadType>.Create(filteredLeadTypes, filter.PageNumber, filter.PageSize);
+        }
+
         public async Task<LeadType?> GetLeadTypeAsync(int leadTypeId)
         {
             IQueryable<LeadType> leadTypes = _dbContext.LeadType;
@@ -40,6 +46,6 @@ namespace LeadManager.Infrastructure.Data.Repositories
         {
             _dbContext.Remove(leadType);
             return (await _dbContext.SaveChangesAsync() >= 0);
-        }
+        }        
     }
 }
