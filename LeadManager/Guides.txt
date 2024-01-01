@@ -1,5 +1,10 @@
 Entity Framework:
 
+The CLI tools for Entity Framework Core need to be installed to add DB migrations and update the DB via console.
+Use the following command to install the tool.
+
+PM> dotnet tool install --global dotnet-ef
+
 To add a code first migration, use the command in the following format, and run it in the packagemanager console
 
 -p refers to the project where the migration is being added
