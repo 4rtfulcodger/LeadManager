@@ -92,15 +92,15 @@ namespace LeadManager.API.Controllers
 
             var leadAttributesForLeadType = await _leadService.GetLeadAttributesAsync(leadType.LeadTypeId);
 
-            foreach (var leadAttributeValue in leadDto.LeadAttributeValues)
+            leadDto.LeadAttributeValues.ForEach(leadAttributeValue =>
             {
-                var leadAttributeForLeadType = leadAttributesForLeadType.Where(l => l.Name == leadAttributeValue.LeadAttributeName).FirstOrDefault();
+                var leadAttributeForLeadType = leadAttributesForLeadType.FirstOrDefault(l => l.Name == leadAttributeValue.LeadAttributeName);
 
                 _apiResponseHandler.ReturnBadRequestIfNull<LeadAttribute>(leadAttributeForLeadType,
                     $"The lead attribute {leadAttributeValue.LeadAttributeName} is not valid for lead type {leadType.Name}");
 
-                leadAttributeValue.LeadAttributeId = leadAttributeForLeadType.LeadAttributeId; 
-            }
+                leadAttributeValue.LeadAttributeId = leadAttributeForLeadType.LeadAttributeId;
+            });
         }
 
         [HttpPatch("{leadId}")]

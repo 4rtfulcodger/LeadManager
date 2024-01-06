@@ -15,13 +15,15 @@ namespace LeadManager.Test.TestRepositories
 
         public async Task<bool> AddSourceAsync(Source source)
         {
+            source.SourceId = sourceList.Count + 1;
             sourceList.Add(source);
             return true;
         }
 
         public async Task<bool> DeleteSource(Source lead)
         {
-            throw new NotImplementedException();
+            await Task.Delay(0);
+            return true;
         }
 
         public async Task<IEnumerable<Source>> GetSourcesAsync()
@@ -32,17 +34,21 @@ namespace LeadManager.Test.TestRepositories
 
         public async Task<PagedList<Source>> GetSourcesAsync(SourceFilter filter)
         {
-            throw new NotImplementedException();
+            IQueryable<Source> queryableSourceList = sourceList.AsQueryable();
+            return await PagedList<Source>.Create(queryableSourceList, filter.PageNumber, filter.PageSize);
+            
         }
 
         public async Task<Source?> GetSourceWithIdAsync(int Id)
         {
-            throw new NotImplementedException();
+            await Task.Delay(0);
+            return sourceList.FirstOrDefault(sl => sl.SourceId == Id);
         }
 
         public async Task<bool> UpdateSourceAsync(int Id)
         {
-            throw new NotImplementedException();
+            await Task.Delay(0);
+            return true;
         }
     }
 }
