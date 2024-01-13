@@ -9,29 +9,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Moq;
+using LeadManager.Test.Fixtures;
 
 namespace LeadManager.Test
 {
-    public class SourceServiceTests
+    public class SourceServiceTests : IClassFixture<SourceServiceFixture>
     {
-        private readonly ILogger<SourceService> _logger;
-        private TestSourceRepository _TestSourceReporitory;
-        private SourceService _SourceService;
+        private readonly SourceServiceFixture _fixture;
 
-        public SourceServiceTests()
+        public SourceServiceTests(SourceServiceFixture fixture)
         {
-            _logger = new Mock<ILogger<SourceService>>().Object;
-            _TestSourceReporitory = new TestSourceRepository();
-            _SourceService = new SourceService(_TestSourceReporitory, _logger);
+            _fixture = fixture;
         }
-
 
         [Fact]
         public async Task SourceService_CreateSourceAsync_ReturnsTrueWhenCalled()
-        {
+        {            
+
             //Arrange
             var newSource = new Source( "TestName","TestDescription");
-            var result = await _SourceService.CreateSourceAsync(newSource);
+            var result = await _fixture.SourceService.CreateSourceAsync(newSource);
 
             //Assert
             Assert.True(result);
@@ -41,37 +38,38 @@ namespace LeadManager.Test
         public async Task SourceService_CreateSourceAsync_AddsANewSourceToRepository()
         {
             //Arrange
-            var sourceCount =  _TestSourceReporitory.GetSourcesAsync().Result.Count();            
-            var newSource = new Source("TestName", "TestDescription");
+            var sourceCount = _fixture.TestSourceReporitory.GetSourcesAsync().Result.Count();            
+            var newSource = new Source("TestName1", "TestDescription1");
 
             //Act
-            var result = await _SourceService.CreateSourceAsync(newSource);
+            var result = await _fixture.SourceService.CreateSourceAsync(newSource);
 
             //Assert
-            Assert.Equal(_TestSourceReporitory.GetSourcesAsync().Result.Count(), sourceCount + 1);
+            Assert.Equal(_fixture.TestSourceReporitory.GetSourcesAsync().Result.Count(), sourceCount + 1);
         }
 
         [Fact]
         public async Task SourceService_GetSourceWithIdAsync_ReturnsSource()
         {
             //Arrange
-            for (int i = 0; i<=3; i++)
-            {
-                await _SourceService.CreateSourceAsync(new Source($"TestName{i}", $"TestDescription{i}"));
-            }
+            for (int i = 2; i<=5; i++)
+              await _fixture.SourceService.CreateSourceAsync(new Source($"TestName{i}", $"TestDescription{i}"));
+            
              
             //Act
-            var sourceCount = await _TestSourceReporitory.GetSourceWithIdAsync(3);
+            var source = await _fixture.TestSourceReporitory.GetSourceWithIdAsync(5);
 
             //Assert
-            Assert.NotNull(sourceCount);
+            Assert.NotNull(source);
+            Assert.Equal("TestName5", source.Name);
+            Assert.Equal("TestDescription5", source.Description);
         }
         
         [Fact]
         public async Task SourceService_GetSourcesAsyncWithFilter_ReturnsPagedListOfSource()
         {
             //Act
-            var sources = await _SourceService.GetSourcesAsync(new SourceFilter{ PageSize=5, PageNumber=1 });
+            var sources = await _fixture.SourceService.GetSourcesAsync(new SourceFilter{ PageSize=5, PageNumber=1 });
             
             //Assert
             Assert.IsType<PagedList<Source>>(sources);
@@ -81,7 +79,7 @@ namespace LeadManager.Test
         public async Task SourceService_UpdateSourceAsync_ReturnsBoolean()
         {     
             //Act
-            var updateResult = await _TestSourceReporitory.UpdateSourceAsync(1);
+            var updateResult = await _fixture.TestSourceReporitory.UpdateSourceAsync(1);
 
             //Assert
             Assert.IsType<bool>(updateResult);
@@ -91,8 +89,8 @@ namespace LeadManager.Test
         public async Task SourceService_DeleteSource_ReturnsBoolean()
         {
             //Act
-            var source = await _TestSourceReporitory.GetSourceWithIdAsync(1);
-            var deleteResult = await _TestSourceReporitory.DeleteSource(source);
+            var source = await _fixture.TestSourceReporitory.GetSourceWithIdAsync(1);
+            var deleteResult = await _fixture.SourceService.DeleteSource(source);
 
             //Assert
             Assert.IsType<bool>(deleteResult);

@@ -13,6 +13,11 @@ namespace LeadManager.Test.TestRepositories
     {
         static List<Source> sourceList = new List<Source>();
 
+        public TestSourceRepository()
+        {
+                
+        }
+
         public async Task<bool> AddSourceAsync(Source source)
         {
             source.SourceId = sourceList.Count + 1;
