@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LeadManager.Test.TestRepositories
 {
-    public class TestSourceRepository : ISourceRepository
+    public class TestSourceRepository: ISourceRepository
     {
         static List<Source> sourceList = new List<Source>();
 

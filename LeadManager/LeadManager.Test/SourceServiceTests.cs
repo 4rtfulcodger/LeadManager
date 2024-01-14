@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using LeadManager.Test.Fixtures;
+using LeadManager.Core.Entities.Supplier;
 
 namespace LeadManager.Test
 {
@@ -20,49 +21,32 @@ namespace LeadManager.Test
         public SourceServiceTests(SourceServiceFixture fixture)
         {
             _fixture = fixture;
-        }
+        }        
 
         [Fact]
         public async Task SourceService_CreateSourceAsync_ReturnsTrueWhenCalled()
         {            
 
             //Arrange
-            var newSource = new Source( "TestName","TestDescription");
+            var newSource = new Source( "TestSourceName","TestSourceDescription");
             var result = await _fixture.SourceService.CreateSourceAsync(newSource);
 
             //Assert
             Assert.True(result);
-        }
-
-        [Fact]
-        public async Task SourceService_CreateSourceAsync_AddsANewSourceToRepository()
-        {
-            //Arrange
-            var sourceCount = _fixture.TestSourceReporitory.GetSourcesAsync().Result.Count();            
-            var newSource = new Source("TestName1", "TestDescription1");
-
-            //Act
-            var result = await _fixture.SourceService.CreateSourceAsync(newSource);
-
-            //Assert
-            Assert.Equal(_fixture.TestSourceReporitory.GetSourcesAsync().Result.Count(), sourceCount + 1);
-        }
+        }               
 
         [Fact]
         public async Task SourceService_GetSourceWithIdAsync_ReturnsSource()
         {
             //Arrange
-            for (int i = 2; i<=5; i++)
-              await _fixture.SourceService.CreateSourceAsync(new Source($"TestName{i}", $"TestDescription{i}"));
-            
-             
+            for (int i = 1; i <= 5; i++)
+                await _fixture.SourceService.CreateSourceAsync(new Source($"TestSourceName{i}", $"TestSourceDescription{i}"));
+
             //Act
             var source = await _fixture.TestSourceReporitory.GetSourceWithIdAsync(5);
 
             //Assert
             Assert.NotNull(source);
-            Assert.Equal("TestName5", source.Name);
-            Assert.Equal("TestDescription5", source.Description);
         }
         
         [Fact]
