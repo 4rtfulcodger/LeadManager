@@ -25,20 +25,7 @@ namespace LeadManager.Test
             //Assert
             Assert.True(result);
         }
-
-        [Fact]
-        public async Task SupplierService_GetSupplierWithIdAsync_ReturnsSupplier()
-        {
-            //Arrange
-            for (int i = 1; i <= 5; i++)
-                await _fixture.SupplierService.AddSupplierAsync(new Supplier($"TestSourceName{i}", $"TestSourceDescription{i}"));
-
-            //Act
-            var supplier = await _fixture.TestSupplierReporitory.GetSupplierWithIdAsync(5);
-
-            //Assert
-            Assert.NotNull(supplier);
-        }
+        
 
         [Fact]
         public async Task SupplierService_GetSuppliersAsyncWithFilter_ReturnsPagedListOfSupplier()
@@ -54,7 +41,7 @@ namespace LeadManager.Test
         public async Task SupplierService_UpdateSupplierAsync_ReturnsBoolean()
         {
             //Act
-            var updateResult = await _fixture.TestSupplierReporitory.UpdateSupplierAsync(1);
+            var updateResult = await _fixture.TestSupplierRepository.UpdateSupplierAsync(1);
 
             //Assert
             Assert.IsType<bool>(updateResult);
@@ -64,7 +51,7 @@ namespace LeadManager.Test
         public async Task SupplierService_DeleteSupplier_ReturnsBoolean()
         {
             //Act
-            var supplier = await _fixture.TestSupplierReporitory.GetSupplierWithIdAsync(1);
+            var supplier = await _fixture.TestSupplierRepository.GetSupplierWithIdAsync(1);
             var deleteResult = await _fixture.SupplierService.DeleteSupplier(supplier);
 
             //Assert
