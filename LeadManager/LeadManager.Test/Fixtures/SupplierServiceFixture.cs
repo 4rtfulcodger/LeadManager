@@ -26,9 +26,9 @@ namespace LeadManager.Test.Fixtures
             var TestSupplierRepositoryMock = new Mock<ISupplierRepository>();
 
             IQueryable<Supplier> queryableSupplierList = new List<Supplier>().AsQueryable();
-            var pagaedList = PagedList<Supplier>.Create(queryableSupplierList, 1, 10);
+            var pagedList = PagedList<Supplier>.Create(queryableSupplierList, 1, 10);
 
-            TestSupplierRepositoryMock.Setup(m => m.GetSuppliersAsync(It.IsAny<SupplierFilter>())).Returns(pagaedList);
+            TestSupplierRepositoryMock.Setup(m => m.GetSuppliersAsync(It.IsAny<SupplierFilter>())).Returns(pagedList);
             TestSupplierRepositoryMock.Setup(m => m.AddSupplierAsync(It.IsAny<Supplier>())).ReturnsAsync(true);
             TestSupplierRepositoryMock.Setup(m => m.UpdateSupplierAsync(It.IsAny<int>())).ReturnsAsync(true);
             TestSupplierRepositoryMock.Setup(m => m.DeleteSupplier(It.IsAny<Supplier>())).ReturnsAsync(true);

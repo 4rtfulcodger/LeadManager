@@ -14,12 +14,12 @@ namespace LeadManager.Infrastructure.Services
         public ILeadTypeRepository _leadTypeRepository;
         public ILeadAttributeRepository _leadAttributeRepository;
 
-        public LeadService(ILeadRepository sourceRepository,
+        public LeadService(ILeadRepository leadRepository,
             ILeadTypeRepository leadTypeRepository,
             ILeadAttributeRepository leadAttributeRepository,
             ILogger<LeadService> logger)
         {
-            _leadRepository = sourceRepository ?? throw new ArgumentException(nameof(sourceRepository));
+            _leadRepository = leadRepository ?? throw new ArgumentException(nameof(leadRepository));
             _leadTypeRepository = leadTypeRepository ?? throw new ArgumentException(nameof(leadTypeRepository));
             _leadAttributeRepository = leadAttributeRepository ?? throw new ArgumentException(nameof(leadAttributeRepository));
             _logger = logger ?? throw new ArgumentException(nameof(logger));
