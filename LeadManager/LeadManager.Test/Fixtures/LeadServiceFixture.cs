@@ -32,15 +32,18 @@ namespace LeadManager.Test.Fixtures
             var TestLeadTypeRepositoryMock = new Mock<ILeadTypeRepository>();
             var TestLeadAttributeRepositoryMock = new Mock<ILeadAttributeRepository>();
 
-            //IQueryable<Supplier> queryableSupplierList = new List<Supplier>().AsQueryable();
-            //var pagedList = PagedList<Supplier>.Create(queryableSupplierList, 1, 10);
+            IQueryable<Lead> queryableLeadList = new List<Lead>().AsQueryable();
+            var pagedLeadList = PagedList<Lead>.Create(queryableLeadList, 1, 10);
 
             TestLeadTypeRepositoryMock.Setup(m => m.CreateLeadTypeAsync(It.IsAny<LeadType>())).ReturnsAsync(true);
+            TestLeadTypeRepositoryMock.Setup(m => m.DeleteLeadType(It.IsAny<LeadType>())).ReturnsAsync(true);
 
-            //TestLeadRepositoryMock.Setup(m => m.GetSuppliersAsync(It.IsAny<SupplierFilter>())).Returns(pagaedList);
-            //TestLeadRepositoryMock.Setup(m => m.AddSupplierAsync(It.IsAny<Supplier>())).ReturnsAsync(true);
-            //TestLeadRepositoryMock.Setup(m => m.UpdateSupplierAsync(It.IsAny<int>())).ReturnsAsync(true);
-            //TestLeadRepositoryMock.Setup(m => m.DeleteSupplier(It.IsAny<Supplier>())).ReturnsAsync(true);
+            TestLeadRepositoryMock.Setup(m => m.CreateLeadAsync(It.IsAny<Lead>())).ReturnsAsync(true);
+            TestLeadRepositoryMock.Setup(m => m.DeleteLead(It.IsAny<Lead>())).ReturnsAsync(true);
+            TestLeadRepositoryMock.Setup(m => m.GetLeadsAsync(It.IsAny<LeadFilter>())).Returns(pagedLeadList);            
+
+            TestLeadAttributeRepositoryMock.Setup(m => m.CreateLeadAttributeAsync(It.IsAny<LeadAttribute>())).ReturnsAsync(true);
+            TestLeadAttributeRepositoryMock.Setup(m => m.DeleteLeadAttribute(It.IsAny<LeadAttribute>())).ReturnsAsync(true);
 
             TestLeadRepository = TestLeadRepositoryMock.Object;
             TestLeadTypeRepository = TestLeadTypeRepositoryMock.Object;
