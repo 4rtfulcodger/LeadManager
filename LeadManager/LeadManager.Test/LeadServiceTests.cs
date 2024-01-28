@@ -99,5 +99,85 @@ namespace LeadManager.Test
             //Assert
             Assert.IsType<PagedList<Lead>>(leads);
         }
+
+        [Fact]
+        public async Task LeadService_GetLeadTypeAsync_ReturnsLeadType()
+        {
+            //Act
+            var leadType = await _fixture.LeadService.GetLeadTypeAsync(1);
+
+            //Assert
+            Assert.IsType<LeadType>(leadType);
+        }
+
+        [Fact]
+        public async Task LeadService_GetLeadTypesAsync_ReturnsPagedListOfLeadType()
+        {
+            //Act
+            var leads = await _fixture.LeadService.GetLeadTypesAsync(new LeadTypeFilter { PageSize = 5, PageNumber = 1 });
+
+            //Assert
+            Assert.IsType<PagedList<LeadType>>(leads);
+        }
+
+        [Fact]
+        public async Task LeadService_GetLeadWithIdAsync_ReturnsLead()
+        {
+            //Act
+            var lead = await _fixture.LeadService.GetLeadWithIdAsync(1,true, true, true, true);
+
+            //Assert
+            Assert.IsType<Lead>(lead);
+        }
+
+        [Fact]
+        public async Task LeadService_GetLeadAttributeAsync_ReturnsLeadAttribute()
+        {
+            //Act
+            var leadAttribute = await _fixture.LeadService.GetLeadAttributeAsync(1);
+
+            //Assert
+            Assert.IsType<LeadAttribute>(leadAttribute);
+        }
+
+        [Fact]
+        public async Task LeadService_GetLeadAttributesAsync_ReturnsLeadAttributes()
+        {
+            //Act
+            var leadAttributes = await _fixture.LeadService.GetLeadAttributesAsync(1);
+
+            //Assert
+            Assert.IsAssignableFrom<IEnumerable<LeadAttribute>>(leadAttributes);
+        }
+
+        [Fact]
+        public async Task LeadService_UpdateLeadTypeAsync_ReturnsBooleanWhenCalled()
+        {
+            //Arrange
+            var result = await _fixture.LeadService.UpdateLeadTypeAsync(1);
+
+            //Assert
+            Assert.IsType<bool>(result);
+        }
+
+        [Fact]
+        public async Task LeadService_UpdateLeadAsync_ReturnsBooleanWhenCalled()
+        {
+            //Arrange
+            var result = await _fixture.LeadService.UpdateLeadAsync(1);
+
+            //Assert
+            Assert.IsType<bool>(result);
+        }
+
+        [Fact]
+        public async Task LeadService_UpdateLeadAttributeAsync_ReturnsBooleanWhenCalled()
+        {
+            //Arrange
+            var result = await _fixture.LeadService.UpdateLeadAttributeAsync(1);
+
+            //Assert
+            Assert.IsType<bool>(result);
+        }
     }
 }
