@@ -44,6 +44,12 @@ namespace LeadManager.Test.TestRepositories
             return supplierList.FirstOrDefault(sl => sl.SupplierId == Id);
         }
 
+        public async Task<Supplier?> GetSupplierWithRefAsync(Guid supplierRef)
+        {
+            await Task.Delay(0);
+            return supplierList.FirstOrDefault(sl => sl.SupplierRef == supplierRef);
+        }
+
         public async Task<bool> UpdateSupplierAsync(int Id)
         {
             await Task.Delay(0);

@@ -42,6 +42,11 @@ namespace LeadManager.Infrastructure.Data.Repositories
             return await _dbContext.Suppliers.Where(l => l.SupplierId == Id).FirstOrDefaultAsync();
         }
 
+        public async Task<Supplier?> GetSupplierWithRefAsync(Guid supplierRef)
+        {
+            return await _dbContext.Suppliers.Where(l => l.SupplierRef == supplierRef).FirstOrDefaultAsync();
+        }
+
         public async Task<bool> DeleteSupplier(Supplier supplier)
         {
             _dbContext.Remove(supplier);

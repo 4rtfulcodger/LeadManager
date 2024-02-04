@@ -10,6 +10,7 @@ namespace LeadManager.Core.Interfaces.Source
         Task<bool> AddSourceAsync(Entities.Source.Source source);
         Task<bool> UpdateSourceAsync(int Id);
         Task<Entities.Source.Source?> GetSourceWithIdAsync(int Id);
+        Task<Entities.Source.Source?> GetSourceWithRefAsync(Guid sourceRef);
         Task<bool> DeleteSource(Entities.Source.Source lead);
     }
 }

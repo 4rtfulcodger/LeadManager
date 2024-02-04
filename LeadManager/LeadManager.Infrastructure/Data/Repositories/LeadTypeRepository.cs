@@ -46,6 +46,12 @@ namespace LeadManager.Infrastructure.Data.Repositories
         {
             _dbContext.Remove(leadType);
             return (await _dbContext.SaveChangesAsync() >= 0);
-        }        
+        }
+
+        public async Task<LeadType?> GetLeadTypeByReferenceAsync(Guid leadTypeRef)
+        {
+            IQueryable<LeadType> leadTypes = _dbContext.LeadType;
+            return await leadTypes.Where(l => l.LeadTypeReference == leadTypeRef).FirstOrDefaultAsync();
+        }
     }
 }

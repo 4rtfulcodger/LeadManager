@@ -46,11 +46,15 @@ namespace LeadManager.Infrastructure.Data.Repositories
         {
             return await _dbContext.Sources.Where(l => l.SourceId == Id).FirstOrDefaultAsync();
         }
+        public async Task<Source?> GetSourceWithRefAsync(Guid sourceRef)
+        {
+            return await _dbContext.Sources.Where(l => l.SourceRef == sourceRef).FirstOrDefaultAsync();
+        }
 
         public async Task<bool> DeleteSource(Source source)
         {
             _dbContext.Remove(source);
             return (await _dbContext.SaveChangesAsync() >= 0);
-        }
+        }        
     }
 }

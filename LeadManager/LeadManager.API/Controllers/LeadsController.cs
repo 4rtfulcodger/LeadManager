@@ -79,16 +79,19 @@ namespace LeadManager.API.Controllers
                 newLead);
         }
 
-        private async Task ValidateLeadForCreateDto(LeadForCreateDto leadDto)
+        private async Task<LeadForCreateDto> ValidateLeadForCreateDto(LeadForCreateDto leadDto)
         {
-            var leadType = await _leadService.GetLeadTypeAsync(leadDto.LeadTypeId);
+            var leadType = await _leadService.GetLeadTypeByRefAsync(new Guid(leadDto.LeadTypeRef));
             _apiResponseHandler.ReturnNotFoundIfEntityDoesNotExist<LeadType>(leadType);
+            leadDto.LeadTypeId = leadType.LeadTypeId;
 
-            var supplier = await _supplierService.GetSupplierWithIdAsync(leadDto.SupplierId);
+            var supplier = await _supplierService.GetSupplierByRefAsync(new Guid(leadDto.SupplierRef));
             _apiResponseHandler.ReturnNotFoundIfEntityDoesNotExist<Supplier>(supplier);
+            leadDto.SupplierId = supplier.SupplierId;
 
-            var source = await _sourceService.GetSourceWithIdAsync(leadDto.SourceId);
+            var source = await _sourceService.GetSourceWithRefAsync(new Guid(leadDto.SourceRef));
             _apiResponseHandler.ReturnNotFoundIfEntityDoesNotExist<Source>(source);
+            leadDto.SourceId = source.SourceId;
 
             var leadAttributesForLeadType = await _leadService.GetLeadAttributesAsync(leadType.LeadTypeId);
 
@@ -101,6 +104,8 @@ namespace LeadManager.API.Controllers
 
                 leadAttributeValue.LeadAttributeId = leadAttributeForLeadType.LeadAttributeId;
             });
+
+            return leadDto;
         }
 
         [HttpPatch("{leadId}")]

@@ -50,6 +50,12 @@ namespace LeadManager.Test.TestRepositories
             return sourceList.FirstOrDefault(sl => sl.SourceId == Id);
         }
 
+        public async Task<Source?> GetSourceWithRefAsync(Guid sourceRef)
+        {
+            await Task.Delay(0);
+            return sourceList.FirstOrDefault(sl => sl.SourceRef == sourceRef);
+        }
+
         public async Task<bool> UpdateSourceAsync(int Id)
         {
             await Task.Delay(0);

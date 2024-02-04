@@ -36,14 +36,19 @@ namespace LeadManager.Infrastructure.Services
             return await _supplierRepository.DeleteSupplier(supplier);
         }
 
-        public async Task<PagedList<Supplier>> GetSuppliersAsync(SupplierFilter filter)
-        {
-           return await _supplierRepository.GetSuppliersAsync(filter);
-        }
-
         public async Task<Supplier?> GetSupplierWithIdAsync(int Id)
         {
             return await _supplierRepository.GetSupplierWithIdAsync(Id);
+        }
+
+        public async Task<Supplier?> GetSupplierByRefAsync(Guid SupplierRef)
+        {
+            return await _supplierRepository.GetSupplierWithRefAsync(SupplierRef);
+        }
+
+        public async Task<PagedList<Supplier>> GetSuppliersAsync(SupplierFilter filter)
+        {
+           return await _supplierRepository.GetSuppliersAsync(filter);
         }
 
         public async Task<bool> UpdateSupplierAsync(int Id)

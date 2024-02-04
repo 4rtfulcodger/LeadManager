@@ -90,9 +90,15 @@ namespace LeadManager.Core.ViewModels
     {
         public int LeadTypeId { get; set; }
 
+        public string LeadTypeRef { get; set; }
+
         public int SourceId { get; set; }
 
+        public string SourceRef { get; set; }
+
         public int SupplierId { get; set; }
+
+        public string SupplierRef { get; set; }
 
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }

@@ -35,6 +35,11 @@ namespace LeadManager.Infrastructure.Services
             return await _sourceRepository.GetSourceWithIdAsync(id);            
         }
 
+        public async Task<Source> GetSourceWithRefAsync(Guid sourceRef)
+        {
+            return await _sourceRepository.GetSourceWithRefAsync(sourceRef);
+        }
+
         public async Task<bool> UpdateSourceAsync(int sourceId)
         {
            return await _sourceRepository.UpdateSourceAsync(sourceId);
@@ -43,6 +48,6 @@ namespace LeadManager.Infrastructure.Services
         public async Task<bool> DeleteSource(Source source)
         {
            return await _sourceRepository.DeleteSource(source);
-        }
+        }        
     }
 }

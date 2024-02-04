@@ -61,6 +61,11 @@ namespace LeadManager.Infrastructure.Services
             return await _leadTypeRepository.GetLeadTypeAsync(leadTypeId);
         }
 
+        public async Task<LeadType?> GetLeadTypeByRefAsync(Guid leadTypeRef)
+        {
+            return await _leadTypeRepository.GetLeadTypeByReferenceAsync(leadTypeRef);
+        }
+
         public async Task<PagedList<LeadType>> GetLeadTypesAsync(LeadTypeFilter filter)
         {
             return await _leadTypeRepository.GetLeadTypesAsync(filter);
@@ -112,6 +117,6 @@ namespace LeadManager.Infrastructure.Services
         public async Task<bool> DeleteLeadAttribute(LeadAttribute leadAttribute)
         {
             return await _leadAttributeRepository.DeleteLeadAttribute(leadAttribute);
-        }
+        }        
     }
 }

@@ -13,6 +13,7 @@ namespace LeadManager.Core.Interfaces.Supplier
         Task<bool> UpdateSupplierAsync(int Id);
         Task<PagedList<LeadManager.Core.Entities.Supplier.Supplier>> GetSuppliersAsync(SupplierFilter filter);
         Task<LeadManager.Core.Entities.Supplier.Supplier?> GetSupplierWithIdAsync(int Id);
+        Task<LeadManager.Core.Entities.Supplier.Supplier?> GetSupplierWithRefAsync(Guid supplierRef);
         Task<bool> DeleteSupplier(LeadManager.Core.Entities.Supplier.Supplier supplier);
     }
 }

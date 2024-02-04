@@ -12,6 +12,7 @@ namespace LeadManager.Core.Interfaces.Lead
         Task<bool> CreateLeadTypeAsync(Entities.LeadType leadType);
         Task<bool> UpdateLeadTypeAsync(int Id);
         Task<Entities.LeadType?> GetLeadTypeAsync(int leadTypeId);
+        Task<Entities.LeadType?> GetLeadTypeByReferenceAsync(Guid leadTypeRef);
         Task<PagedList<LeadManager.Core.Entities.LeadType>> GetLeadTypesAsync(LeadTypeFilter filter);
         Task<bool> DeleteLeadType(Entities.LeadType leadType);
     }
