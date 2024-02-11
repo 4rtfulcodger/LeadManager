@@ -6,6 +6,8 @@ using LeadManager.Core.Helpers;
 using LeadManager.Core.Interfaces;
 using LeadManager.Core.Interfaces.Supplier;
 using LeadManager.Core.ViewModels;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -14,6 +16,7 @@ namespace LeadManager.API.Controllers
 {
     [ApiController]
     [Route("/api/suppliers")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class SuppliersController : ControllerBase
     {
         private readonly ILogger<FilesController> _logger;
