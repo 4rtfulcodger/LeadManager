@@ -23,7 +23,7 @@ namespace LeadManager.API.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class LeadsController : ControllerBase
     {
-        private readonly ILogger<FilesController> _logger;
+        private readonly ILogger<LeadsController> _logger;
         private readonly IEmailService _emailService;
         private readonly IMapper _mapper;        
         public ILeadService _leadService;
@@ -31,7 +31,7 @@ namespace LeadManager.API.Controllers
         public ISupplierService _supplierService;
         private readonly IApiResponseHandler _apiResponseHandler;
 
-        public LeadsController(ILogger<FilesController> logger,
+        public LeadsController(ILogger<LeadsController> logger,
             IEmailService emailService,
             ISourceService sourceService,
             ILeadService leadService,
