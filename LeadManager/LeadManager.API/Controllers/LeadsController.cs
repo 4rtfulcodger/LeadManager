@@ -53,7 +53,7 @@ namespace LeadManager.API.Controllers
         public async Task<IActionResult> GetLeads(LeadFilter leadFilter)
         {
             var filteredLeads = await _leadService.GetLeadsAsync(leadFilter);
-            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PagedList<Lead>.GetPaginationMetadata(filteredLeads)));
+            Response?.Headers?.Add("X-Pagination", JsonSerializer.Serialize(PagedList<Lead>.GetPaginationMetadata(filteredLeads)));
 
             return _apiResponseHandler.ReturnSearchResult<IEnumerable<Lead>,IEnumerable<LeadDto>>(filteredLeads);        
         }

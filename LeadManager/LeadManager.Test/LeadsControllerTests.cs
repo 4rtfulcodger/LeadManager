@@ -43,5 +43,19 @@ namespace LeadManager.Test
             Assert.Equal(200, objectResult.StatusCode);
             Assert.IsType<LeadDto>(objectResult.Value);
         }
+
+        [Fact]
+        public async Task LeadsController_GetLeads_ReturnsIActionResult()
+        {
+            var iActionResult = await _fixture.LeadsController.GetLeads(new Core.Helpers.LeadFilter{
+                FromCreatedDate=DateTime.Now.AddDays(-7), 
+                ToCreatedDate= DateTime.Now
+                });
+            var objectResult = iActionResult as ObjectResult;
+
+            Assert.NotNull(objectResult);
+            Assert.Equal(200, objectResult.StatusCode);
+            Assert.IsAssignableFrom<IEnumerable<LeadDto>>(objectResult.Value);
+        }
     }
 }
